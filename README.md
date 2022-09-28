@@ -15,6 +15,10 @@ Build react-app:
 
 	cd react-app
 	npm run build
+	
+Replace files
+	
+	react-app/build -> server/wwwroot
 
 Build & run ASP.NET Core:
 
