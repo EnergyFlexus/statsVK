@@ -7,9 +7,9 @@ QUICK START
 
 Requirements:
   
-  .NET Core 6+
-  nodejs 14+
-  npm
+	.NET Core 6+
+  	nodejs 14+
+  	npm
 
 Build react-app:
 
@@ -18,5 +18,5 @@ Build react-app:
 
 Build & run ASP.NET Core:
 
-  cd server
-  dotnet run
+ 	cd server
+  	dotnet run
