@@ -4,11 +4,21 @@
 import NavbarCollapse from 'react-bootstrap/NavbarCollapse';
 import Nav from 'react-bootstrap/Nav'
 import NavLink from 'react-bootstrap/NavLink';
+import logo from './fire-2-32.png'
 
 function TopNavigationLinks() {
     return (
         <NavbarCollapse id='responsive-navbar-nav'>
             <Nav className = 'me-auto' >
+                
+                <NavLink href = '/'>  
+                    <img src ={logo}
+                        height = '32'
+                        width= '32'
+                        className='d-inline-block align-top'
+                        alt = "Logo"/>
+                </NavLink>
+
                 <NavLink href = '/'>Главная</NavLink>
                 <NavLink href = '/Chats/'>Чаты</NavLink>
                 <NavLink href = '/FAQ/'>FAQ</NavLink>
