@@ -1,8 +1,8 @@
+import Button from 'react-bootstrap/Button';
 
-export default function TopNavigationButton() {
+
+export default function TopNavigationButton(props) {
     return (
-        <div className="TopNavigationButton">
-            
-        </div>
+        <Button size="lg">{props.text}</Button>
     )
 }
