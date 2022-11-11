@@ -7,7 +7,7 @@ QUICK START
 
 Requirements:
   
-	.NET Core 6+
+	.NET Core 7+
   	nodejs 14+
   	npm
 
