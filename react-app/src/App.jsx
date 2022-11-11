@@ -1,6 +1,6 @@
 import './App.css';
-import './Components/TopNavigationBar';
 import TopNavigationBar from './Components/TopNavigationBar';
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 function App() {
 	return (

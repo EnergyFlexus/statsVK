@@ -1,15 +1,25 @@
-import TopNavigationButton from "./TopNavigationButton";
+//import TopNavigationButton from "./TopNavigationButton";
+//Bootstrap import
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 
-export default function TopNavigationBar() {
+//import NavigationBar
+import TopNavigationLogo from "./TopNavigationLogo";
+import TopNavigationLinks from './TopNavigationLinks';
+import NavbarToggle from 'react-bootstrap/esm/NavbarToggle';
+
+
+
+function TopNavigationBar() {
     return (
-        <Navbar bg="light" expand="lg">
+        <Navbar fixed ='top' collapseOnSelect bg="dark" expand="xl" variant='dark'>
             <Container>
-                <TopNavigationButton text = "Чаты"/>
-                <TopNavigationButton text = "FAQ"/>
-                <TopNavigationButton text ="Авторизация"/>
+                <TopNavigationLogo/>
+                <NavbarToggle aria-controls='responsive-navbar-nav'/>
+                <TopNavigationLinks></TopNavigationLinks>
             </Container>
         </Navbar>
     )
 }
+
+export default TopNavigationBar;
