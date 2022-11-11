@@ -1,10 +1,7 @@
-//название ссылок через пропсы не прокинешь из-за того что создаются не 3 ссылки, а 9 
-//поэтому пришлось так если идеи лучше есть пишите работяги я за пивлм
-
 import NavbarCollapse from 'react-bootstrap/NavbarCollapse';
 import Nav from 'react-bootstrap/Nav'
 import NavLink from 'react-bootstrap/NavLink';
-import logo from './fire-2-32.png'
+import TopNavigationLogo from './TopNavigationLogo'
 
 function TopNavigationLinks() {
     return (
@@ -12,11 +9,7 @@ function TopNavigationLinks() {
             <Nav className = 'me-auto' >
                 
                 <NavLink href = '/'>  
-                    <img src ={logo}
-                        height = '32'
-                        width= '32'
-                        className='d-inline-block align-top'
-                        alt = "Logo"/>
+                    <TopNavigationLogo/>
                 </NavLink>
 
                 <NavLink href = '/'>Главная</NavLink>
@@ -27,8 +20,6 @@ function TopNavigationLinks() {
                 <NavLink href = '/Authorization/'>Авторизация</NavLink>
             </Nav> 
         </NavbarCollapse>
-
     );
 }
-
 export default TopNavigationLinks;
