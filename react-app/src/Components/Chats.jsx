@@ -2,9 +2,10 @@ import NavigationBar from './NavigationBar/NavigationBar';
 
 function Chats() {
   return (
-    	<div className="Chats">
-			<NavigationBar/>
-	 	</div>
+	<div>
+		<NavigationBar/>
+		<div>Chats here.</div>
+	</div>
   	);
 }
 

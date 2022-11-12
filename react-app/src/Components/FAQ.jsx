@@ -2,8 +2,9 @@ import NavigationBar from './NavigationBar/NavigationBar';
 
 function FAQ() {
   return (
-    	<div className="FAQ">
+    	<div>
 			<NavigationBar/>
+			<div>F.A.Q. here.</div>
 	 	</div>
   	);
 }
