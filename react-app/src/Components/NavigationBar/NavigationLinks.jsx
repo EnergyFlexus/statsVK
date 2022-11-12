@@ -4,7 +4,7 @@ const navLinkStyle = {
     marginTop: 3,
 }
 
-function TopNavigationLinks(props) {
+function NavigationLinks(props) {
     const pages = props.pages;
     const listPages = pages.map((item) => (
         <Nav.Link key = {item.id} style={navLinkStyle} href = {item.link}>{item.text}</Nav.Link>
@@ -15,4 +15,4 @@ function TopNavigationLinks(props) {
         </Nav> 
     );
 }
-export default TopNavigationLinks;
+export default NavigationLinks;

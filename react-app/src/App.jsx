@@ -1,11 +1,11 @@
 import './App.css';
-import TopNavigationBar from './Components/TopNavigationBar';
+import NavigationBar from './Components/NavigationBar/NavigationBar';
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 function App() {
 	return (
     	<div className="App">
-			<TopNavigationBar/>
+			<NavigationBar/>
 	 	</div>
   	);
 }
