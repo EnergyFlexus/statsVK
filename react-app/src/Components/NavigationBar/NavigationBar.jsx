@@ -21,7 +21,7 @@ function NavigationBar(props) {
                 <NavbarCollapse id='responsive-navbar-nav'>
                     <NavigationLogo link = '/'/>
                     <NavigationLinks pages = {pages}/>
-                    <AuthorizationLink link="/" text = "Авторизация"/>
+                    <AuthorizationLink link="/auth" text = "Авторизация"/>
                 </NavbarCollapse>
             </Container>
         </Navbar>
