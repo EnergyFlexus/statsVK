@@ -3,9 +3,9 @@ import Container from 'react-bootstrap/Container';
 import NavbarToggle from 'react-bootstrap/esm/NavbarToggle';
 import NavbarCollapse from 'react-bootstrap/NavbarCollapse';
 
-import TopNavigationLinks from './TopNavigationLinks';
-import TopNavigationLogo from './TopNavigationLogo';
-import TopAuthorizationLink from './TopAuthorizationLink';
+import TopNavigationLinks from './NavigationLinks';
+import TopNavigationLogo from './NavigationLogo';
+import TopAuthorizationLink from './AuthorizationLink';
 
 const pages = [
     {id: 0, text: 'Главная', link: '/'},
