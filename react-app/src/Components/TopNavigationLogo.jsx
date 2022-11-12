@@ -1,5 +1,5 @@
 import NavbarBrand from 'react-bootstrap/esm/NavbarBrand';
-import logo from './fire-2-32.png'
+import logo from './flame.svg';
 
 export default function TopNavigationLogo(props) {
     return (
