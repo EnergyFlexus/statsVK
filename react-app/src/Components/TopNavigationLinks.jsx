@@ -1,29 +1,18 @@
-import NavbarCollapse from 'react-bootstrap/NavbarCollapse';
 import Nav from 'react-bootstrap/Nav'
-import NavLink from 'react-bootstrap/NavLink';
-import TopNavigationLogo from './TopNavigationLogo'
 
 const navLinkStyle = {
     marginTop: 3,
 }
 
-function TopNavigationLinks() {
+function TopNavigationLinks(props) {
+    const pages = props.pages;
+    const listPages = pages.map((item) => (
+        <Nav.Link key = {item.id} style={navLinkStyle} href = {item.link}>{item.text}</Nav.Link>
+    ));
     return (
-        <NavbarCollapse id='responsive-navbar-nav'>
-            <Nav className = 'me-auto' >
-                
-                <NavLink href = '/'>  
-                    <TopNavigationLogo/>
-                </NavLink>
-
-                <NavLink style={navLinkStyle} href = '/'>Главная</NavLink>
-                <NavLink style={navLinkStyle} href = '/Chats/'>Чаты</NavLink>
-                <NavLink style={navLinkStyle} href = '/FAQ/'>FAQ</NavLink>
-            </Nav> 
-            <Nav className = 'me-right'>
-                <NavLink href = '/Authorization/'>Авторизация</NavLink>
-            </Nav> 
-        </NavbarCollapse>
+        <Nav className = 'me-auto' >
+            {listPages};
+        </Nav> 
     );
 }
 export default TopNavigationLinks;
