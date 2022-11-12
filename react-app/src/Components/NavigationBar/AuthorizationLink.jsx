@@ -1,9 +1,10 @@
 import Nav from 'react-bootstrap/Nav';
+import {LinkContainer} from 'react-router-bootstrap'
 
 export default function AuthorizationLink(props) {
   return (
     <Nav className = 'me-right'>
-        <Nav.Link href = {props.link}>{props.text}</Nav.Link>
+        <LinkContainer to = {props.link}><Nav.Link>{props.text}</Nav.Link></LinkContainer>
     </Nav>
   )
 }

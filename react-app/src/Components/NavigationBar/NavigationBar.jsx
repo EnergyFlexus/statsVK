@@ -14,7 +14,7 @@ const pages = [
 ];
 
 function NavigationBar(props) {
-    return (
+    return ( 
         <Navbar fixed ='top' collapseOnSelect bg="dark" expand="xl" variant='dark'>
             <Container>
                 <NavbarToggle aria-controls='responsive-navbar-nav'/>
@@ -24,7 +24,7 @@ function NavigationBar(props) {
                     <AuthorizationLink link="/auth" text = "Авторизация"/>
                 </NavbarCollapse>
             </Container>
-        </Navbar>
+        </Navbar> 
     )
 }
 

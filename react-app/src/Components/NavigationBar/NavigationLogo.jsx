@@ -1,15 +1,19 @@
 import NavbarBrand from 'react-bootstrap/esm/NavbarBrand';
+import {LinkContainer} from 'react-router-bootstrap'
+
 import logo from './flame.svg';
 
 export default function NavigationLogo(props) {
     return (
-        <NavbarBrand href={props.link}>
-            <img src ={logo}
-            height = '30'
-            width= '30'
-            className='d-inline-block align-top'
-            alt = "Logo"
-            />
-        </NavbarBrand>
+        <LinkContainer to={props.link}>
+                <NavbarBrand>
+                <img src ={logo}
+                height = '30'
+                width= '30'
+                className='d-inline-block align-top'
+                alt = "Logo"
+                />
+            </NavbarBrand>
+        </LinkContainer>
     )
 }
