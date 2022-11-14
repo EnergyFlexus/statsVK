@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import './index.css';
-import Main from './Components/Main';
-import Chats from './Components/Chats';
-import FAQ from './Components/FAQ';	
+import Main from './Pages/Main';
+import Chats from './Pages/Chats';
+import FAQ from './Pages/FAQ';	
 
 const router = createBrowserRouter([
   	{

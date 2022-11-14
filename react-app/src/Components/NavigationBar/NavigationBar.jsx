@@ -15,7 +15,7 @@ const pages = [
 
 function NavigationBar(props) {
     return ( 
-        <Navbar collapseOnSelect bg="dark" expand="xl" variant='dark'>
+        <Navbar collapseOnSelect bg="dark" expand="sm" variant='dark'>
             <Container>
                 <NavbarToggle aria-controls='responsive-navbar-nav'/>
                 <NavbarCollapse id='responsive-navbar-nav'>

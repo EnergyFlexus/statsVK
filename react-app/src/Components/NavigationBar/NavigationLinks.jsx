@@ -8,7 +8,9 @@ const navLinkStyle = {
 function NavigationLinks(props) {
     const pages = props.pages;
     const listPages = pages.map((item) => (
-        <LinkContainer to = {item.link}><Nav.Link key = {item.id} style={navLinkStyle} >{item.text}</Nav.Link></LinkContainer>
+        <LinkContainer to = {item.link}>
+            <Nav.Link key = {item.id} style={navLinkStyle}>{item.text}</Nav.Link>
+        </LinkContainer>
     ));
     return (
         <Nav className = 'me-auto' >
