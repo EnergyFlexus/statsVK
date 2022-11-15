@@ -4,6 +4,9 @@ import { Container } from 'react-bootstrap';
 
 import NavigationBar from '../Components/NavigationBar/NavigationBar';
 import ChatPreviewCard from '../Components/Chats/ChatPreviewCard';
+import SearchPanel from '../Components/Chats/SearchPanel/SearchPanel';
+import Loading from '../Components/Loading';
+
 // Для тестирования fetch
 const testUrl = 'https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits';
 // Тестирование UI
@@ -53,13 +56,14 @@ function Chats() {
 		return (
 		<>
 			<NavigationBar/>
-			Loading...
+			<Loading/>
 		</>
 		);
 	} else {
 		return (
 			<>
 				<NavigationBar/>
+				<SearchPanel/>
 				<Container>
 					{
 						// Не забыть сменить testItems на items
