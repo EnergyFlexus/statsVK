@@ -7,7 +7,7 @@
 
 # testing
 /coverage
-
+/src/Components/Chats/ChatPreview/testAvatar.jpg
 # production
 /build
 
