@@ -2,8 +2,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { Container } from 'react-bootstrap';
 
-import NavigationBar from '../Components/NavigationBar/NavigationBar';
-import ChatPreviewCard from '../Components/Chats/ChatPreviewCard';
+import ChatPreviewCard from '../Components/Chats/ChatPreview/ChatPreviewCard';
 import SearchPanel from '../Components/Chats/SearchPanel/SearchPanel';
 import Loading from '../Components/Loading';
 
@@ -15,16 +14,22 @@ const testItems = [
 		id: 0,
 		name: 'Чат номер один',
 		countMembers: 12,
+		countMessages: 100,
+		frequency: 2.5,
 	},
 	{
 		id: 1,
 		name: 'Чат номер два',
 		countMembers: 13,
+		countMessages: 120,
+		frequency: 3.5,
 	},
 	{
 		id: 2,
 		name: 'Чат номер три',
 		countMembers: 14,
+		countMessages: 1000,
+		frequency: 1.1,
 	},
 ];
 
@@ -48,21 +53,18 @@ function Chats() {
 	if (error) {
 		return (
 		<>
-			<NavigationBar/>
 			Error: {error.message}
 		</>
 		);
 	} else if (!isLoaded) {
 		return (
 		<>
-			<NavigationBar/>
 			<Loading/>
 		</>
 		);
 	} else {
 		return (
 			<>
-				<NavigationBar/>
 				<SearchPanel/>
 				<Container>
 					{

@@ -1,8 +1,11 @@
 import React from 'react';
+import { Container } from 'react-bootstrap';
 
 function SearchPanel() {
   return (
-    <div>SearchPanel</div>
+    <Container>
+        SearchPanel
+    </Container>
   )
 }
 
