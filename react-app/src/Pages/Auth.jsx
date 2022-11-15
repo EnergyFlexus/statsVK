@@ -1,4 +1,3 @@
-import NavigationBar from '../Components/NavigationBar/NavigationBar';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Container, Form, Button, CloseButton, Card} from 'react-bootstrap';
 import logo from '../assets/icons/logo.svg';
@@ -16,7 +15,7 @@ function Auth() {
 		event.preventDefault();
 
 		//Если все поля заполнены
-		if(Object.values(errors).includes(true) == false){
+		if(Object.values(errors).includes(true) === false){
 			setResponse('Пользователь не найден')
 		} 
 		else {
