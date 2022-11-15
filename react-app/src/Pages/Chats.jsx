@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { Container, Row } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 
 import NavigationBar from '../Components/NavigationBar/NavigationBar';
 import ChatPreviewCard from '../Components/Chats/ChatPreviewCard';
@@ -61,12 +61,10 @@ function Chats() {
 			<>
 				<NavigationBar/>
 				<Container>
-					<Row>
 					{
 						// Не забыть сменить testItems на items
 						testItems.map((item) => (<ChatPreviewCard attr={item} key={item.id}/>))
 					}
-					</Row>
 				</Container>
 			</>
 		);
