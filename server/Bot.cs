@@ -2,10 +2,10 @@ namespace Bot
 {
 	public static class BotExtensions
 	{
-		public static async Task<IResult> MapBot(HttpContext context)
+		public static async Task MapBot(HttpContext context)
 		{
 			// bot code here.
-			return Results.Ok();
+			await Results.Ok().ExecuteAsync(context);
 		}
 	}
 }

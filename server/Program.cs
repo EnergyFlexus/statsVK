@@ -33,4 +33,9 @@ app.UseStaticFiles();
 app.MapGroup("/api").MapApi();
 app.MapGet("/bot", BotExtensions.MapBot);
 
+// redirect fix
+app.MapGet("/{**any}", async (context) => {
+	await context.Response.SendFileAsync(web_root_dir + "/index.html");
+});
+
 app.Run();
