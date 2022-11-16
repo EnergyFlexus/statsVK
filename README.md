@@ -8,6 +8,7 @@ QUICK START
 Requirements:
   
 	.NET Core 7+
+	MySql 8+
   	nodejs 14+
   	npm
 
