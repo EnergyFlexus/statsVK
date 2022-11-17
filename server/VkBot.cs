@@ -91,13 +91,6 @@ namespace VkBot
                 return;
             }
 
-			context.Response.StatusCode = 200;
-			await context.Response.WriteAsync("ok");
-
-            // it isnt first try
-            if(context.Request.Headers.ContainsKey("X-Retry-Counter"))
-                return;
-
 			// проверяем тип
             if(vkUpdate.type == "confirmation")
             {
@@ -105,6 +98,13 @@ namespace VkBot
             	await context.Response.WriteAsync(confirmation_string);
                 return;
             }
+
+			context.Response.StatusCode = 200;
+			await context.Response.WriteAsync("ok");
+
+            // it isnt first try
+            if(context.Request.Headers.ContainsKey("X-Retry-Counter"))
+                return;
 
 			// types check
             if(vkUpdate.type != VkUpdate.message_new) 
