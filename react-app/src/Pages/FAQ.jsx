@@ -4,7 +4,6 @@ import AccordionHeader from 'react-bootstrap/esm/AccordionHeader';
 import AccordionItem from 'react-bootstrap/esm/AccordionItem';
 
 
-
 function FAQ() {
   return (
 		<>
@@ -48,8 +47,10 @@ function FAQ() {
 							<AccordionHeader>Где найти ссылку на группу в ВК?</AccordionHeader>
 							<AccordionBody>
 								<Nav className='mr-auto'>
-									<NavLink href='https://vk.com/club181354529'>
-										https://vk.com/club181354529
+									<NavLink onClick={(event) => {
+										window.open('https://vk.com/club181354529')
+									}}>
+										Ссылка на группу в вк
 									</NavLink>
 								</Nav>
 							</AccordionBody>
