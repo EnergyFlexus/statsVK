@@ -6,6 +6,7 @@ import Main from './Pages/Main';
 import Chats from './Pages/Chats';
 import FAQ from './Pages/FAQ';	
 import Auth from './Pages/Auth';	
+import SignUp from './Pages/SignUp';
 
 const router = createBrowserRouter([
   	{
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
 	{
     	path: "/auth",
     	element: <Auth/>,
+  	},
+	{
+    	path: "/signup",
+    	element: <SignUp/>,
   	}
 ]);
 

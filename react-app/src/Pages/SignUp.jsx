@@ -4,11 +4,11 @@ import logo from '../assets/icons/logo.svg';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-function Auth() {
+function SignUp() {
 	const [validated, setValidated] = useState(false);
 	const [response, setResponse] = useState('');
-	const [errors, setErrors] = useState({email: true, password: true});
-	const [form, setForm] = useState({email: '', password: ''});
+	const [errors, setErrors] = useState({nickname: true, password: true, passwordRepeat: true});
+	const [form, setForm] = useState({passwordRepeat: '', nickname: '', password: ''});
 	
 
 	const onSubmit = (event) => {
@@ -16,7 +16,7 @@ function Auth() {
 
 		//Если все поля заполнены
 		if(Object.values(errors).includes(true) === false){
-			setResponse('Пользователь не найден')
+			setResponse('Аккаунт с таким именем уже зарегистрирован')
 		} 
 		else {
 			!validated && setValidated(true);
@@ -24,13 +24,25 @@ function Auth() {
 	};
 
 	const setInput = (input, value) => {
+		let error = false;
+		if(input === 'nickname' ) {
+			error = !/^[a-zA-Z0-9-_.]{3,24}$/.test(value);
+		}
+		else if(input === 'password' ) {
+			error = !/^[a-zA-Z0-9-_!@#$?%^&*.]{6,24}$/.test(value);
+		}
+		else if(input === 'passwordRepeat' ) {
+			error = value !== form.password;
+		}
+
 		setForm({
 			...form,
 			[input]:value
-		})
+		});
+
 		setErrors({
 			...errors,
-			[input]:value.length < 1
+			[input]:error
 		});
 	}
 
@@ -47,7 +59,7 @@ function Auth() {
 							alt = "Logo"
 						/>
 					</Link>
-					<h1>Авторизация</h1>
+					<h1>Регистрация</h1>
 				</div>
 				{response && (
 					<Card className='w-100 mb-3' border={'danger'}>
@@ -61,43 +73,57 @@ function Auth() {
 					<Card.Body>
 						<Form noValidate onSubmit={onSubmit}>
 							<Form.Group className='mb-3'>
-								<Form.Label>Email или имя пользователя</Form.Label>
+								<Form.Label>Имя пользователя</Form.Label>
 								<Form.Control 
 									type="text" 
 									required 
-									value={form.email} 
-									onChange={e => setInput('email', e.target.value)}
-									isInvalid={validated && errors.email}
+									value={form.nickname} 
+									onChange={e => setInput('nickname', e.target.value)}
+									isInvalid={validated && errors.nickname}
 								/>
 								<Form.Control.Feedback type="invalid">
-									Заполните поле
+									Имя должно быть длинной от 3 до 24 символов и состоять из латинских букв, цифр, символов(-._)
 								</Form.Control.Feedback>
 							</Form.Group>
 							<Form.Group className='mb-3'>
-								<Form.Label className='d-flex justify-content-between'>
-									<span>Пароль</span>
-									<Link to='/'><small>Забыли пароль?</small></Link>
+								<Form.Label>
+									Пароль
 								</Form.Label>
 								<Form.Control
-									type="password" 
+									type="text" 
 									required 
 									value={form.password} 
 									onChange={e => setInput('password', e.target.value)}
 									isInvalid={validated && errors.password}
 								/>
 								<Form.Control.Feedback type="invalid">
-									Заполните поле 
+									Пароль должен быть длинной от 6 до 24 символов и состоять из латинских букв, цифр, символов(!@#$?%^&*-._)
+								</Form.Control.Feedback>
+							</Form.Group>
+							<Form.Group className='mb-3'>
+								<Form.Label>
+									Повторите пароль
+								</Form.Label>
+								<Form.Control
+									type="text" 
+									required 
+									value={form.passwordRepeat} 
+									onChange={e => setInput('passwordRepeat', e.target.value)}
+									isInvalid={validated && errors.passwordRepeat}
+								/>
+								<Form.Control.Feedback type="invalid">
+									Пароли не совпадают
 								</Form.Control.Feedback>
 							</Form.Group>
 							<Button variant="primary" type='submit' className='w-100'>
-								Войти
+								Зарегистрироваться
 							</Button>
 						</Form>
 					</Card.Body>
 				</Card>
 				<Card className='w-100'>
 					<Card.Body className='text-center'>
-						<span>Нет аккаунта? <Link to='/signup'>Создать аккаунт</Link></span> 
+						<span>Есть аккаунт? <Link to='/auth'>Войти в аккаунт</Link></span> 
 					</Card.Body>
 				</Card>
 			</Container>
@@ -105,4 +131,4 @@ function Auth() {
   	);
 }
 
-export default Auth;
+export default SignUp;
