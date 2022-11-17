@@ -1,0 +1,4 @@
+{
+    "url" : "http://localhost:80",
+    "connection_string" : "Server=194.67.67.101;Database=StatsVkDb;User=remote;Password=MySQL_remote_pass;"
+}

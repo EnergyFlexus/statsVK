@@ -5,6 +5,7 @@ import './index.css';
 import Main from './Pages/Main';
 import Chats from './Pages/Chats';
 import FAQ from './Pages/FAQ';	
+import SignUp from './Pages/SignUp';
 import Auth from './Pages/Auth';
 import Chat from './Pages/Chat';	
 import Layout from './Pages/Layout';
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
 				path: "auth",
 				element: <Auth/>,
 			},
+      {
+    	  path: "/signup",
+    	  element: <SignUp/>,
+  	  }
 			{
 				path: "chats/:chatId",
 				element: <Chat/>,
