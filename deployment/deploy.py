@@ -9,6 +9,6 @@ wwwroot = publish + "/wwwroot"
 react_build = "../react-app/build"
 
 if os.path.exists(wwwroot):
-    os.remove(wwwroot)
+    shutil.rmtree(wwwroot, ignore_errors=True)
 shutil.move(react_build, publish)
 os.rename(publish + "/build", wwwroot)
