@@ -4,7 +4,6 @@ import AccordionHeader from 'react-bootstrap/esm/AccordionHeader';
 import AccordionItem from 'react-bootstrap/esm/AccordionItem';
 
 
-
 function FAQ() {
   return (
 		<>
