@@ -98,6 +98,14 @@ namespace VkBot
             if(context.Request.Headers.ContainsKey("X-Retry-Counter"))
                 return;
 
+			// проверяем тип
+            if(vkUpdate.type == "confirmation")
+            {
+				context.Response.StatusCode = 200;
+            	await context.Response.WriteAsync(confirmation_string);
+                return;
+            }
+
 			// types check
             if(vkUpdate.type != VkUpdate.message_new) 
                 return;
