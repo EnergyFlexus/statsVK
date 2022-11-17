@@ -7,6 +7,7 @@ import Chats from './Pages/Chats';
 import FAQ from './Pages/FAQ';	
 import SignUp from './Pages/SignUp';
 import SignIn from './Pages/SignIn';
+import PassReset from './Pages/PassReset';
 import Chat from './Pages/Chat';	
 import Layout from './Pages/Layout';
 
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
     	  		path: "signup",
     	  		element: <SignUp/>,
   	 		},
+			{
+				path: "pass_reset",
+				element: <PassReset/>
+			},
 			{
 				path: "chats/:chatId",
 				element: <Chat/>,

@@ -76,7 +76,7 @@ function SignIn() {
 							<Form.Group className='mb-3'>
 								<Form.Label className='d-flex justify-content-between'>
 									<span>Пароль</span>
-									<Link to='/'><small>Забыли пароль?</small></Link>
+									<Link to='/pass_reset'><small>Забыли пароль?</small></Link>
 								</Form.Label>
 								<Form.Control
 									type="password" 
