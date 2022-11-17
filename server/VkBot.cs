@@ -144,7 +144,7 @@ namespace VkBot
 			}
 			chat_user.messages_count += 1;
 
-			if(msg.text is not null)
+			if(msg.text is not null && msg.text != String.Empty)
 			{
 				Message message = new Message();
 				message.chat_user = chat_user;
