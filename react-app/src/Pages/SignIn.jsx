@@ -4,7 +4,7 @@ import logo from '../assets/icons/logo.svg';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-function Auth() {
+function SignIn() {
 	const [validated, setValidated] = useState(false);
 	const [response, setResponse] = useState('');
 	const [errors, setErrors] = useState({email: true, password: true});
@@ -105,4 +105,4 @@ function Auth() {
   	);
 }
 
-export default Auth;
+export default SignIn;

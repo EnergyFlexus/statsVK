@@ -123,7 +123,7 @@ function SignUp() {
 				</Card>
 				<Card className='w-100'>
 					<Card.Body className='text-center'>
-						<span>Есть аккаунт? <Link to='/auth'>Войти в аккаунт</Link></span> 
+						<span>Есть аккаунт? <Link to='/signin'>Войти в аккаунт</Link></span> 
 					</Card.Body>
 				</Card>
 			</Container>
