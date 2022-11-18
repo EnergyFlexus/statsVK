@@ -98,7 +98,7 @@ function Auth() {
 				</Card>
 				<Card className='w-100'>
 					<Card.Body className='text-center'>
-						<span>Нет аккаунта? <Link to='/reg'>Создать аккаунт</Link></span> 
+						<span>Нет аккаунта? <Link to='/signup'>Создать аккаунт</Link></span> 
 					</Card.Body>
 				</Card>
 			</Container>
