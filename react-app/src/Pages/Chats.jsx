@@ -49,7 +49,7 @@ function Chats() {
 			setError(error);
 			setIsLoaded(false);
 		});
-	});
+	 }, []);
 	if (error) {
 		return (
 		<>
