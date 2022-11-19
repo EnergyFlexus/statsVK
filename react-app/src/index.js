@@ -10,6 +10,7 @@ import SignIn from './Pages/SignIn';
 import PassReset from './Pages/PassReset';
 import Chat from './Pages/Chat';	
 import Layout from './Pages/Layout';
+import ChatsChart from './Components/ChatsChart/ChatsChart';
 
 const router = createBrowserRouter([
   	{
