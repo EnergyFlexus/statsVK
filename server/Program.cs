@@ -17,6 +17,7 @@ builder.Services.AddDbContextPool<VkDbContext>(options => {
     options.UseMySql(connection_string, ServerVersion.AutoDetect(connection_string));});
 
 builder.Services.AddSingleton<Bot>(new Bot(builder.Configuration));
+builder.Services.AddSingleton<Api>(new Api( /*vk client here */));
 
 var curr_dir = Directory.GetCurrentDirectory();
 var web_root_dir = "wwwroot";
