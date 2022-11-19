@@ -142,7 +142,6 @@ namespace VkBot
 				chat_user = new ChatUser(chat_id, user_id);
 				await vkDbContext.chat_users.AddAsync(chat_user);
 			}
-			chat_user.messages_count += 1;
 
 			if(msg.text is not null && msg.text != String.Empty)
 			{
@@ -151,6 +150,7 @@ namespace VkBot
 				message.text = msg.text;
 				message.date = msg.date;
 				await vkDbContext.messages.AddAsync(message);
+				chat_user.messages_count += 1;
 			}
 			await vkDbContext.SaveChangesAsync();            
 		}
