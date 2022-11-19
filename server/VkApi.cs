@@ -34,18 +34,26 @@ namespace VkApi
 				await api.MessagesByUserId(context, vkDbContext, id, ord);
 			});
 
-			group.MapGet("/MessagesByChatIdOffset/{chat_id:int}/{count:int}/{start_id:int}", // + order
+			group.MapGet("/MessagesByIds/{chat_id:int}/{user_id}", // + order
+				async (HttpContext context, VkDbContext vkDbContext, Api api, long chat_id, long user_id) => {
+					
+					var order = context.Request.Query["order"];
+					ApiOrder ord = Api.ParseOrder(order);
+					await api.MessagesByIds(context, vkDbContext, chat_id, user_id, ord);
+				});
+
+			group.MapGet("/MessagesByChatIdOffset/{id:int}/{count:int}/{start_id:int?}", // + order
 				async (HttpContext context, 
 				VkDbContext vkDbContext, 
 				Api api, 
-				long chat_id, 
+				long id, 
 				long count, 
-				long start_id)=> {
+				long? start_id) => {
 
 
 				var order = context.Request.Query["order"];
 				ApiOrder ord = Api.ParseOrder(order);
-				await api.MessagesByChatIdOffset(context, vkDbContext, chat_id, count, start_id, ord);
+				await api.MessagesByChatIdOffset(context, vkDbContext, id, count, start_id, ord);
 			});
 
 			group.MapGet("/MessagesCountsInChatsAll", // + order
@@ -56,13 +64,18 @@ namespace VkApi
 				await api.MessagesCountsInChatsAll(context, vkDbContext, ord);
 			});
 
+			group.MapGet("/MessagesCountsByChatId/{id:int}",
+				async (HttpContext context, VkDbContext vkDbContext, Api api, long id) => {
+				
+				await api.MessagesCountsByChatId(context, vkDbContext, id);
+			});
+
 			group.MapGet("/ChatsAll", // + order
 				async (HttpContext context, VkDbContext vkDbContext, Api api) => {
 
 				var order = context.Request.Query["order"];
 				ApiOrder ord = Api.ParseOrder(order);
 				await api.ChatsAll(context, vkDbContext, ord);
-
 			});
 
 			group.MapGet("/ChatById/{id:int}", 
@@ -97,7 +110,13 @@ namespace VkApi
 				async (HttpContext context, VkDbContext vkDbContext, Api api, long chat_id, long user_id) => {
 				
 				await api.ChatUserByIds(context, vkDbContext, chat_id, user_id);
-			});			
+			});
+
+			group.MapGet("/vk/UsersInfoByChatId/{id:int}",
+				async (HttpContext context, VkDbContext vkDbContext, Api api, long id) => {
+
+				await api.UsersInfoByChatId(context, vkDbContext, id);
+			});
 			return group;
 		}
 	}
@@ -109,7 +128,16 @@ namespace VkApi
 	}
 	public class Api 
 	{
-		// vkClient here
+		VkClient vkClient {get; init;}
+
+		public Api(string? access_token, string? version)
+		{
+			if(access_token is null || version is null)
+				vkClient = new VkClient("", "");
+			else
+				vkClient = new VkClient(access_token, version);
+		}
+			
 
 		public static ApiOrder ParseOrder(string? order)
 		{
@@ -198,18 +226,44 @@ namespace VkApi
 				
 			await Results.Json(messages_DTO).ExecuteAsync(context);
 		}
-		
-		public async Task MessagesByChatIdOffset
-			(HttpContext context, VkDbContext vkDbContext, long chat_id, long count, long start_id, ApiOrder order)
+
+		public async Task MessagesByIds
+			(HttpContext context, VkDbContext vkDbContext, long chat_id, long user_id, ApiOrder order)
 		{
 			IQueryable<Message> messages;
 			IQueryable<MessageDTO> messages_DTO;
 
-			if(start_id == 0)
+			messages = from m in vkDbContext.messages
+				where m.user_id == user_id && m.chat_id == chat_id
+				select m;
+
+			if(order == ApiOrder.Asc)
+				messages_DTO = from m in messages
+					orderby m.message_id ascending
+					select new MessageDTO(m);
+
+			else if(order == ApiOrder.Desc)
+				messages_DTO = from m in messages
+					orderby m.message_id descending
+					select new MessageDTO(m);
+			else
+				messages_DTO = from m in messages
+					select new MessageDTO(m);
+				
+			await Results.Json(messages_DTO).ExecuteAsync(context);
+		}
+		
+		public async Task MessagesByChatIdOffset
+			(HttpContext context, VkDbContext vkDbContext, long id, long count, long? start_id, ApiOrder order)
+		{
+			IQueryable<Message> messages;
+			IQueryable<MessageDTO> messages_DTO;
+
+			if(start_id is null || start_id == 0)
 				start_id = long.MaxValue;
 
 			messages = from m in vkDbContext.messages
-				where m.chat_id == chat_id && m.message_id < start_id
+				where m.chat_id == id && m.message_id < start_id
 				select m;
 
 			if(order == ApiOrder.Asc)
@@ -226,6 +280,35 @@ namespace VkApi
 					select new MessageDTO(m);
 
 			messages_DTO = messages_DTO.Take((int)count);
+			await Results.Json(messages_DTO).ExecuteAsync(context);
+		}
+
+		public async Task MessagesByChatIdDate
+			(HttpContext context, VkDbContext vkDbContext, long id, long date1, long? date2, ApiOrder order)
+		{
+			IQueryable<Message> messages;
+			IQueryable<MessageDTO> messages_DTO;
+
+			if(date2 is null || date2 == 0)
+				date2 = long.MaxValue;
+
+			messages = from m in vkDbContext.messages
+				where m.chat_id == id && m.date < date2 && m.date > date1
+				select m;
+
+			if(order == ApiOrder.Asc)
+				messages_DTO = from m in messages
+					orderby m.date ascending
+					select new MessageDTO(m);
+
+			else if(order == ApiOrder.Desc)
+				messages_DTO = from m in messages
+					orderby m.date descending
+					select new MessageDTO(m);
+			else
+				messages_DTO = from m in messages
+					select new MessageDTO(m);
+
 			await Results.Json(messages_DTO).ExecuteAsync(context);
 		}
 
@@ -246,6 +329,12 @@ namespace VkApi
 					select c);
 
 			await Results.Json(messages_counts).ExecuteAsync(context);
+		}
+
+		public async Task MessagesCountsByChatId(HttpContext context, VkDbContext vkDbContext, long id)
+		{
+			var messages_count = vkDbContext.chat_users.Sum(cu => cu.messages_count);
+			await Results.Json(messages_count).ExecuteAsync(context);
 		}
 
 		public async Task ChatsAll(HttpContext context, VkDbContext vkDbContext, ApiOrder order)
@@ -341,6 +430,21 @@ namespace VkApi
 
 			if(chat_user is null) await Results.Json(null).ExecuteAsync(context);
 			else await Results.Json(new ChatUserDTO(chat_user)).ExecuteAsync(context);
+		}
+
+		public async Task UsersInfoByChatId(HttpContext context, VkDbContext vkDbContext, long id)
+		{
+			var result = await vkClient.MessagesGetConversationMembersAsync
+				(id + VkClient.const_peer_id, new List<string> {"first_name,last_name,photo_50"});
+
+			if(result is null)
+			{
+				await Results.Json(null).ExecuteAsync(context);
+				return;
+			}
+
+			JsonArray arr = (JsonArray)result["response"]!["profiles"]!;
+			await Results.Json(arr).ExecuteAsync(context);
 		}
 	}
 }
