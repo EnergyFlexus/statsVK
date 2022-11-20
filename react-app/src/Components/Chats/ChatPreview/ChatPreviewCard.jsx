@@ -7,7 +7,7 @@ function ChatPreviewCard(props) {
   	const name = props.attr.name;
   	const countMembers = props.attr.countMembers;
 	const avatar = props.attr.avatar;
-	const frequency = props.attr.frequency;
+	const lastMessageDate = props.attr.lastMessageDate;
 	const countMessages = props.attr.countMessages;
 	const id = props.attr.id;
   	return (
@@ -16,7 +16,7 @@ function ChatPreviewCard(props) {
         		<ChatPreviewHeader name={name}/>
       		</Card.Header>
       		<Card.Body>
-				<ChatPreviewBody avatar={avatar} countMembers={countMembers} frequency={frequency} countMessages={countMessages} name={name} id={id}/>
+				<ChatPreviewBody avatar={avatar} countMembers={countMembers} lastMessageDate={lastMessageDate} countMessages={countMessages} name={name} id={id}/>
       		</Card.Body>
     	</Card>
   	);

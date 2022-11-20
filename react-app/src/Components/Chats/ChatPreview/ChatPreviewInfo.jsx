@@ -3,7 +3,7 @@ import { Container, Row } from 'react-bootstrap';
 
 function ChatPreviewInfo(props) {
 	const countMembers = props.countMembers;
-	const frequency = props.frequency;
+	const lastMessageDate = props.lastMessageDate;
 	const countMessages = props.countMessages;
   	return (
     	<Container>
@@ -11,7 +11,7 @@ function ChatPreviewInfo(props) {
 				<small>Участников: {countMembers}</small>
 			</Row>
 			<Row>
-				<small>Частота сообщений: {frequency} сообщений в час</small>
+				<small>Дата последнего сообщения: {(new Date(lastMessageDate)).toLocaleString()}</small>
 			</Row>
 			<Row>
 				<small>Кол-во сообщений: {countMessages}</small>

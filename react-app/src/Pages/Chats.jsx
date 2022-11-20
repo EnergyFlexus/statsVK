@@ -11,25 +11,25 @@ const testUrl = 'https://api.github.com/repos/javascript-tutorial/en.javascript.
 // Тестирование UI
 const testItems = [
 	{
-		id: 0,
+		id: 8,
 		name: 'Чат номер один',
 		countMembers: 12,
-		countMessages: 100,
-		frequency: 2.5,
+		countMessages: 158,
+		lastMessageDate: 2.5,
 	},
 	{
 		id: 1,
 		name: 'Чат номер два',
 		countMembers: 13,
 		countMessages: 120,
-		frequency: 3.5,
+		lastMessageDate: 3.5,
 	},
 	{
 		id: 2,
 		name: 'Чат номер три',
 		countMembers: 14,
 		countMessages: 1000,
-		frequency: 1.1,
+		lastMessageDate: 1.1,
 	},
 ];
 
@@ -48,11 +48,11 @@ function Chats() {
 		setSearchString(search);
 	});
 	// Как Леха (который снюсоед) сделает бэк - поменять
+	console.log('keka');
 	// useEffect(() => {
-	// 	fetch(testUrl)
+	// 	fetch('api/MessagesCountsInChatsAll')
 	// 	.then(res => res.json())
 	// 	.then((result) => {
-	// 		setItems(result);
 	// 		setIsLoaded(true);
 	// 	},
 	// 	(error) => {
