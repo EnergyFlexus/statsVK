@@ -194,10 +194,10 @@ VkApi methods: (методы, которые через бота обращаю�
 
 	
 	# возвращает инфо о беседе (название, ава и тд)
-	/api/ChatInfoById ? [chat_ids=[id1],(id2),(id...)]
+	/api/vk/ChatInfoById ? [chat_ids=[id1],(id2),(id...)]
 
 	# пример
-	/api/ChatInfoById?chat_ids=8
+	/api/vk/ChatInfoById?chat_ids=8
 
 	[{"title":"name","members_count":5,"owner_id":123,"state":"in","photo":{"photo_50":"url","photo_100":"url","photo_200":"url","is_default_photo":false,"is_default_call_photo":false},"active_ids":[321,212,111,2242],"is_disappearing":false,"is_service":false}]
 
