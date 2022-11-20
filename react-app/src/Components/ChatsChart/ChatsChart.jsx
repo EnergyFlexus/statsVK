@@ -10,7 +10,9 @@ import {
 } from "chart.js";
 
 import React, { useState} from "react";
-import { Container, Row, Col, ToggleButton, ToggleButtonGroup} from 'react-bootstrap'
+import { Container, Row, Col, ToggleButton, ToggleButtonGroup, Dropdown} from 'react-bootstrap'
+import DropdownMenu from "react-bootstrap/esm/DropdownMenu";
+import DropdownToggle from "react-bootstrap/esm/DropdownToggle";
 import { Line } from "react-chartjs-2";
 
    
@@ -79,10 +81,10 @@ const showChartAs = {
 	Year: 2
 };
 
+
+
+
 function ChatsChart() {
-    const [value, setValue] = useState([1,3])
-    const handleChange = (val) => setValue(val)   
-	
 	const [showAs, setShowAs] = useState(showChartAs.Week)
 	let chart;
 	switch (showAs) {
@@ -102,17 +104,23 @@ function ChatsChart() {
         <Container>
             <Row>
                 <Col>
-                    <ToggleButtonGroup className="mt-2" type="radio" name = 'options' value={value} onChange={handleChange}>
-                        <ToggleButton id="tgb-radio-1" value={1} onClick={event => {setShowAs(showChartAs.Week)}}>
-                            Статистика за неделю
-                        </ToggleButton>
-                        <ToggleButton id="tgb-radio-2" value={2} onClick={event => {setShowAs(showChartAs.Month)}}>
-                            Статистика за месяц
-                        </ToggleButton>
-                        <ToggleButton id="tgb-radio-3" value={3} onClick={event => {setShowAs(showChartAs.Year)}}>
-                            Статистика за год
-                        </ToggleButton>
-                    </ToggleButtonGroup>
+					<Dropdown>
+						<DropdownToggle variant="secondary" className="mt-2">
+							Статистика чатов
+						</DropdownToggle>
+						<DropdownMenu variant="dark">
+							<Dropdown.Item onClick={event => {setShowAs(showChartAs.Week)}}>
+								Статистика за неделю
+							</Dropdown.Item>
+							<Dropdown.Item onClick={event => {setShowAs(showChartAs.Month)}}>
+								Статистика за месяц
+							</Dropdown.Item>
+							<Dropdown.Item onClick={event => {setShowAs(showChartAs.Year)}}>
+								Статистика за год
+							</Dropdown.Item>
+							
+						</DropdownMenu>
+					</Dropdown>
                 </Col>
             </Row>
             <Row>
