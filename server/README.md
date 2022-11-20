@@ -96,10 +96,10 @@ Messages:
 
 	
 	# кол-во сообщений в конкретном чате
-	/api/MessagesCountsByChatId
+	/api/MessagesCountsByChatId/[id]
 
 	# пример
-	/api/MessagesCountsByChatId
+	/api/MessagesCountsByChatId/2
 
 	23
 
@@ -191,6 +191,15 @@ VkApi methods: (методы, которые через бота обращаю�
 
 	[{"id":123,"photo_50":"(url)","first_name":"Футбольный","last_name":"Мячик","can_access_closed":true,"is_closed":true},
 	{"id":321,"photo_50":"(url)","first_name":"Жак","last_name":"Фреско","can_access_closed":true,"is_closed":true}]
+
+	
+	# возвращает инфо о беседе (название, ава и тд)
+	/api/ChatInfoById ? [chat_ids=[id1],(id2),(id...)]
+
+	# пример
+	/api/ChatInfoById?chat_ids=8
+
+	[{"title":"name","members_count":5,"owner_id":123,"state":"in","photo":{"photo_50":"url","photo_100":"url","photo_200":"url","is_default_photo":false,"is_default_call_photo":false},"active_ids":[321,212,111,2242],"is_disappearing":false,"is_service":false}]
 
 
 

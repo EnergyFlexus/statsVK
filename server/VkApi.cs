@@ -97,6 +97,21 @@ namespace VkApi
 				await api.ChatById(context, vkDbContext, id);
 			});
 
+			group.MapGet("ChatInfoById", // + chat_ids in query
+				async (HttpContext context, VkDbContext vkDbContext, Api api) => {
+
+				string c_chat_ids = context.Request.Query["chat_ids"]!;
+				List<long> peer_ids = new List<long>();
+				string[] _ids = c_chat_ids.Split(',');
+				foreach(var c in _ids)
+				{
+					long peer_id = Int32.Parse(c) + VkClient.const_peer_id;
+					peer_ids.Add(peer_id);
+				}
+
+				await api.ChatInfoById(context, vkDbContext, peer_ids);
+			});
+
 			group.MapGet("/ChatUsersAll", 
 				async (HttpContext context, VkDbContext vkDbContext, Api api) => {
 				
@@ -471,6 +486,32 @@ namespace VkApi
 
 			JsonArray arr = (JsonArray)result["response"]!["profiles"]!;
 			await Results.Json(arr).ExecuteAsync(context);
+		}
+
+		public async Task ChatInfoById(HttpContext context, VkDbContext vkDbContext, List<long> ids)
+		{
+			var result = await vkClient.MessagesGetConversationsById
+				(ids);
+
+			if(result is null)
+			{
+				await Results.Json(null).ExecuteAsync(context);
+				return;
+			}
+
+			JsonArray? arr = (JsonArray)result["response"]!["items"]!;
+			var res = new List<JsonObject>();
+
+			foreach(JsonObject? a in arr)
+			{
+				JsonObject cs = (JsonObject)a!["chat_settings"]!;
+				cs.Remove("admin_ids");
+				cs.Remove("is_group_channel");
+				cs.Remove("acl");
+				res.Add(cs);
+			}
+			
+			await Results.Json(res).ExecuteAsync(context);
 		}
 	}
 }

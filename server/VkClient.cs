@@ -37,6 +37,7 @@ namespace VkBot
                 builder.Append(id?.ToString());
                 builder.Append(",");
             }
+			builder.Remove(builder.Length - 1, 1);
             return builder.ToString();
         }
 
@@ -89,9 +90,6 @@ namespace VkBot
             return response;          
         }
     
-        /// <summary>
-        /// messages.getChat
-        /// </summary>
         public async Task<JsonNode?> MessagesGetConversationMembersAsync 
 			(long peer_id, List<string> fileds)
         {
@@ -107,5 +105,17 @@ namespace VkBot
             var response = await GetMethodAsync(method, query);
             return response;
         }
+
+		public async Task<JsonNode?> MessagesGetConversationsById
+			(List<long> peer_ids)
+		{
+			var query = new Dictionary<string, string>();
+			query.Add("peer_ids", ListToQueryValue(peer_ids));
+
+			string method = "messages.getConversationsById";
+
+			var response = await GetMethodAsync(method, query);
+            return response;
+		}
     }
 }
