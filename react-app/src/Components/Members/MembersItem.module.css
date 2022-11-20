@@ -1,0 +1,21 @@
+.main {
+    display: flex;
+    align-items: flex-start;
+}
+
+.avatar {
+    width: 35px;
+    height: 35px;
+    background-size: cover;
+    border-radius: 20px;
+}
+
+.content {
+    margin-left: 15px;
+    font-size: 14px;
+}
+
+.author {
+    color: #2a5885; 
+    font-weight: bold;
+}

@@ -1,0 +1,41 @@
+.main {
+    display: flex;
+    align-items: flex-start;
+}
+
+.none {
+    display: none;
+}
+
+.avatar {
+    width: 35px;
+    height: 35px;
+    background-size: cover;
+    border-radius: 20px;
+}
+
+.content {
+    margin-left: 15px;
+    font-size: 14px;
+}
+
+.contentPadding {
+    padding-left: 35px;
+}
+
+.firstRow {
+}
+
+
+.lastRow {
+}
+
+.author {
+    color: #2a5885; 
+    font-weight: bold;
+}
+
+.date {
+    margin-left: 10px;
+    color: rgb(102, 102, 102);
+}
