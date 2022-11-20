@@ -97,21 +97,6 @@ namespace VkApi
 				await api.ChatById(context, vkDbContext, id);
 			});
 
-			group.MapGet("ChatInfoById", // + chat_ids in query
-				async (HttpContext context, VkDbContext vkDbContext, Api api) => {
-
-				string c_chat_ids = context.Request.Query["chat_ids"]!;
-				List<long> peer_ids = new List<long>();
-				string[] _ids = c_chat_ids.Split(',');
-				foreach(var c in _ids)
-				{
-					long peer_id = Int32.Parse(c) + VkClient.const_peer_id;
-					peer_ids.Add(peer_id);
-				}
-
-				await api.ChatInfoById(context, vkDbContext, peer_ids);
-			});
-
 			group.MapGet("/ChatUsersAll", 
 				async (HttpContext context, VkDbContext vkDbContext, Api api) => {
 				
@@ -145,6 +130,22 @@ namespace VkApi
 
 				await api.UsersInfoByChatId(context, vkDbContext, id);
 			});
+
+			group.MapGet("/vk/ChatInfoById", // + chat_ids in query
+				async (HttpContext context, VkDbContext vkDbContext, Api api) => {
+
+				string c_chat_ids = context.Request.Query["chat_ids"]!;
+				List<long> peer_ids = new List<long>();
+				string[] _ids = c_chat_ids.Split(',');
+				foreach(var c in _ids)
+				{
+					long peer_id = Int32.Parse(c) + VkClient.const_peer_id;
+					peer_ids.Add(peer_id);
+				}
+
+				await api.ChatInfoById(context, vkDbContext, peer_ids);
+			});
+			
 			return group;
 		}
 	}
