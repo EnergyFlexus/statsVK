@@ -1,8 +1,9 @@
-import { Container, Accordion, Nav, NavLink} from 'react-bootstrap';
+import { Container, Accordion, Nav, NavLink, Row, Col} from 'react-bootstrap';
 import AccordionBody from 'react-bootstrap/esm/AccordionBody';
 import AccordionHeader from 'react-bootstrap/esm/AccordionHeader';
 import AccordionItem from 'react-bootstrap/esm/AccordionItem';
-
+import inter from '../assets/icons-tutor/in.png';
+import bot from '../assets/icons-tutor/bot.png';
 
 function FAQ() {
   return (
@@ -29,7 +30,7 @@ function FAQ() {
 										1. Зарегистрировать аккаунт на сайте.
 									</p>
 									<p>
-										2. Перейти в <a href='https://vk.com/basher03' target='_blank'>группу ВК.</a>
+										2. Перейти в <a href='https://vk.com/club181354529' target='_blank'>группу ВК.</a>
 									</p>
 									<p>
 										3. Добавить бота в беседу.
@@ -53,6 +54,52 @@ function FAQ() {
 										Ссылка на группу в вк
 									</NavLink>
 								</Nav>
+							</AccordionBody>
+						</AccordionItem>
+						<AccordionItem eventKey='2'>
+							<AccordionHeader>Как добавить бота в беседу?</AccordionHeader>
+							<AccordionBody>
+								<Row>
+									<Col>
+									<div className='acc'>
+										<p>
+											1. Нажать на кнопку "Добавить в чат".
+										</p>
+									</div>
+									</Col>
+									<Col>
+										<img
+										src = {inter}
+                    					className='d-inline-block align-top'
+										alt='in'
+											/>
+									</Col>
+								</Row>
+								<Row>
+									<Col>
+										<div className='acc'>
+											<p>
+												2. Выбрать нужную беседу и добавить бота в чат.
+											</p>
+										</div>
+									</Col>
+								</Row>
+								<Row>
+									<Col>
+										<div className='acc'>
+											<p>
+												3. Выдать боту доступ ко всей переписке.
+											</p>
+										</div>
+									</Col>
+									<Col/>
+									<Col>
+										<img
+										src={bot}
+										className ='d-inline-block align-top mt-4'
+										alt = 'bot-adm'/>
+									</Col>
+								</Row>
 							</AccordionBody>
 						</AccordionItem>
 					</Accordion>
