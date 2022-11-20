@@ -34,22 +34,32 @@ const testItems = [
 ];
 
 function Chats() {
-	const [items, setItems] = useState([]);
-	const [isLoaded, setIsLoaded] = useState(false);
+	const allItems = testItems;
+
+	const [items, setItems] = useState(testItems);
+	const [isLoaded, setIsLoaded] = useState(true);
 	const [error, setError] = useState();
+	const [searchString, setSearchString] = useState('');
+
+	const setSearch = ((search) => {
+		const reg = RegExp(search, 'iu');
+		const _items = allItems.filter((item) => (reg.test(item.name)));
+		setItems(_items);
+		setSearchString(search);
+	});
 	// Как Леха (который снюсоед) сделает бэк - поменять
-	useEffect(() => {
-		fetch(testUrl)
-		.then(res => res.json())
-		.then((result) => {
-			setItems(result);
-			setIsLoaded(true);
-		},
-		(error) => {
-			setError(error);
-			setIsLoaded(false);
-		});
-	 }, []);
+	// useEffect(() => {
+	// 	fetch(testUrl)
+	// 	.then(res => res.json())
+	// 	.then((result) => {
+	// 		setItems(result);
+	// 		setIsLoaded(true);
+	// 	},
+	// 	(error) => {
+	// 		setError(error);
+	// 		setIsLoaded(false);
+	// 	});
+	//  }, []);
 	if (error) {
 		return (
 		<>
@@ -59,19 +69,26 @@ function Chats() {
 	} else if (!isLoaded) {
 		return (
 		<>
-			<SearchPanel/>
 			<Loading/>
 		</>
+		);
+	} else if(items.length > 0){
+		return (
+			<>
+				<SearchPanel setSearch = {setSearch}/>
+				<Container>
+					{
+						items.map((item) => (<ChatPreviewCard attr={item} key={item.id}/>))
+					}
+				</Container>
+			</>
 		);
 	} else {
 		return (
 			<>
-				<SearchPanel/>
+				<SearchPanel setSearch = {setSearch}/>
 				<Container>
-					{
-						// Не забыть сменить testItems на items
-						testItems.map((item) => (<ChatPreviewCard attr={item} key={item.id}/>))
-					}
+					По запросу {searchString} ничего не было найдено.
 				</Container>
 			</>
 		);
