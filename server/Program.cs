@@ -10,13 +10,18 @@ var builder = WebApplication.CreateBuilder(args);
 // configuration setup
 builder.Configuration.AddJsonFile("config.json");
 
-string url =                    builder.Configuration["url"]!;
-string connection_string =      builder.Configuration["connection_string"]!;
+string url = builder.Configuration["url"]!;
+string connection_string = builder.Configuration["connection_string"]!;
+
+string? access_token = builder.Configuration["access_token"];
+string? version = builder.Configuration["version"];
+
 
 builder.Services.AddDbContextPool<VkDbContext>(options => {
     options.UseMySql(connection_string, ServerVersion.AutoDetect(connection_string));});
 
 builder.Services.AddSingleton<Bot>(new Bot(builder.Configuration));
+builder.Services.AddSingleton<Api>(new Api(access_token, version));
 
 var curr_dir = Directory.GetCurrentDirectory();
 var web_root_dir = "wwwroot";
