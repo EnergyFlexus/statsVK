@@ -7,11 +7,13 @@ QUICK START
 
 Requirements:
   
-	.NET Core 6+
+	.NET Core 7+
+	MySql 8+
   	nodejs 14+
   	npm
+	python 3+ (deployment script)
 
-Run the app in the development mode:
+Run the react-app in the development mode:
 
 	npm start
 
@@ -20,17 +22,19 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
+Server build:
 
-Build react-app:
+	cd server
+	dotnet build
 
-	cd react-app
+React-app build:
+
 	npm run build
-	
-Replace files
-	
-	react-app/build -> server/wwwroot
 
-Build & run ASP.NET Core:
+Full deployment in 1 script:
 
- 	cd server
-  	dotnet run
+	cd react-app 
+	npm i (npm dependences)
+	cd ../deployment
+	python3 deploy.py
+
