@@ -3,3 +3,6 @@ obj
 Properties
 wwwroot
 appsettings.json
+config.json
+.vscode
+*.http
