@@ -85,8 +85,15 @@ const showChartAs = {
 
 
 function ChatsChart() {
-	const [showAs, setShowAs] = useState(showChartAs.Week)
+	const [showAs, setShowAs] = useState(showChartAs.Week);
+	const [text, setText] = useState("Статистика за неделю");
 	let chart;
+	
+	const changeText = ((showAs, text) => {
+		setShowAs(showAs);
+		setText(text);
+	});
+
 	switch (showAs) {
 		case showChartAs.Week:
 			chart = <Line options={chartOptions} data={chartData1} />
@@ -106,16 +113,16 @@ function ChatsChart() {
                 <Col>
 					<Dropdown>
 						<DropdownToggle variant="secondary" className="mt-2">
-							Статистика чатов
+							{text}
 						</DropdownToggle>
 						<DropdownMenu variant="dark">
-							<Dropdown.Item onClick={event => {setShowAs(showChartAs.Week)}}>
+							<Dropdown.Item onClick={event => {changeText(showChartAs.Week, 'Статистика за неделю')}}>
 								Статистика за неделю
 							</Dropdown.Item>
-							<Dropdown.Item onClick={event => {setShowAs(showChartAs.Month)}}>
+							<Dropdown.Item onClick={event => {changeText(showChartAs.Month, 'Статистика за месяц')}}>
 								Статистика за месяц
 							</Dropdown.Item>
-							<Dropdown.Item onClick={event => {setShowAs(showChartAs.Year)}}>
+							<Dropdown.Item onClick={event => {changeText(showChartAs.Year, 'Статистика за год')}}>
 								Статистика за год
 							</Dropdown.Item>
 							
