@@ -10,10 +10,13 @@ import {
 } from "chart.js";
 
 import React, { useState} from "react";
+import { useEffect } from "react";
 import { Container, Row, Col, ToggleButton, ToggleButtonGroup, Dropdown} from 'react-bootstrap'
 import DropdownMenu from "react-bootstrap/esm/DropdownMenu";
 import DropdownToggle from "react-bootstrap/esm/DropdownToggle";
 import { Line } from "react-chartjs-2";
+import Loading from "../Loading";
+import test from "./Test";
 
    
 ChartJS.register(
@@ -38,42 +41,6 @@ const chartOptions = {
 		},
 	},
 };
-// Тестоыые данные, в будущем они будут браться из fetch
-const chartData1 = {
-	labels: [1,46,7,32],
-	datasets: [
-		{
-		label: "Количество посещений",
-		data: [1,2,3,4,5,6],
-		borderColor: "rgb(53, 162, 235)",
-		backgroundColor: "rgba(53, 162, 235, 0.4)",
-		},
-	],
-};
-
-const chartData2 = {
-	labels: [1,2,3,4],
-	datasets: [
-		{
-		label: "Количество посещений",
-		data: [1,2,3,4],
-		borderColor: "rgb(53, 162, 235)",
-		backgroundColor: "rgba(53, 162, 235, 0.4)",
-		},
-	],
-};
-
-const chartData3 = {
-	labels: [1,2,5,33],
-	datasets: [
-		{
-		label: "Количество посещений",
-		data: [1,2,3,4,5,67],
-		borderColor: "rgb(53, 162, 235)",
-		backgroundColor: "rgba(53, 162, 235, 0.4)",
-		},
-	],
-};
 
 const showChartAs = {
 	Week: 0,
@@ -81,32 +48,89 @@ const showChartAs = {
 	Year: 2
 };
 
+const unixTime = {
+	Day: 86400,
+	Week: 604800,
+	Month: 2629743,
+	Year: 31556926 
+}
+const testUrl = 'https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits';
 
-
-
-function ChatsChart() {
+function ChatsChart(props) {
 	const [showAs, setShowAs] = useState(showChartAs.Week);
 	const [text, setText] = useState("Статистика за неделю");
+	const [isLoaded, setIsLoaded] = useState(false);
+	const now = Date.now();
+
+	let border;
+	
+		
 	let chart;
+	let chartData1 = {
+		labels: [124123,124355],
+		datasets: [
+			{
+			label: "Количество сообщений",
+			data: [1,56,4,3],
+			borderColor: "rgb(53, 162, 235)",
+			backgroundColor: "rgba(53, 162, 235, 0.4)",
+			},
+		],
+	};
+	
 	
 	const changeText = ((showAs, text) => {
+		setIsLoaded(false);
 		setShowAs(showAs);
 		setText(text);
 	});
+	let charData;
+	useEffect(() => {
+		const fetching = (async () => {
+			let res;
+			let border;
+			switch (showAs) {
+				case showChartAs.Week:
+					res = await fetch(testUrl);
+					res = await res.json();
+					border = Date.now() - unixTime.Week;
+				break;
+				case showChartAs.Month:
+					res = await fetch(testUrl);
+					res = await res.json();
+					border = Date.now() - unixTime.Month;
+				break;
+				case showChartAs.Year:
+					res = await fetch(testUrl);
+					res = await res.json();
+					border = Date.now() - unixTime.Year;
+				break;
+				default:
+				break;
+			}
+			setIsLoaded(true);
+		}); 
+		fetching();
+	},[showAs]);
 
-	switch (showAs) {
-		case showChartAs.Week:
-			chart = <Line options={chartOptions} data={chartData1} />
-		break;
-		case showChartAs.Month:
-			chart = <Line options={chartOptions} data={chartData2} />
-		break;
-		case showChartAs.Year:
-			chart = <Line options={chartOptions} data={chartData3} />
-		break;
-		default:
-		break;
+	if(isLoaded) {
+		switch (showAs) {
+			case showChartAs.Week:
+				chart = <Line options={chartOptions} data={chartData1} />
+			break;
+			case showChartAs.Month:
+				//chart = <Line options={chartOptions} data={chartData2} />
+			break;
+			case showChartAs.Year:
+				//chart = <Line options={chartOptions} data={chartData3} />
+			break;
+			default:
+			break;
+		}
+	} else {
+		chart = <Loading/>
 	}
+	
     return (
         <Container>
             <Row>
