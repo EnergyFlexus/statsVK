@@ -59,6 +59,7 @@ function Chats() {
 	} else if (!isLoaded) {
 		return (
 		<>
+			<SearchPanel/>
 			<Loading/>
 		</>
 		);

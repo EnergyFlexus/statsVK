@@ -11,7 +11,7 @@ function ChatPreviewCard(props) {
 	const countMessages = props.attr.countMessages;
 	const id = props.attr.id;
   	return (
-    	<Card className='mb-3'>
+    	<Card className='mt-3'>
       		<Card.Header>
         		<ChatPreviewHeader name={name}/>
       		</Card.Header>
