@@ -26,16 +26,18 @@ function Chats() {
 		 * @param {Array} ids
 		 * @return {String}
 		 */
-		const chatInfo = (id) => (`/api/vk/ChatInfoById?${id.map()}`)
+		const getChatInfoUrl = (ids) => (`/api/vk/ChatInfoById?chat_ids=${ids.join(',')}`);
 		const fetching = (async (url) => {
 			try {
 				let res = await fetch(url);
 				res = await res.json();
+				console.log(res);
 				return res;
 			} catch (error) {
 				setError(error);
 			}
 		});
+		fetching(getChatInfoUrl([8]));
 	}, []);
 	if (error) {
 		return (
