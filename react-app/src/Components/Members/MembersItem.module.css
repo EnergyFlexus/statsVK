@@ -19,3 +19,15 @@
     color: #2a5885; 
     font-weight: bold;
 }
+
+.skeletonAuthor {
+    width: 120px;
+    min-height: 12px;
+    border-radius: 2px;
+}
+
+.skeletonLastRow {
+    width: 80px;
+    min-height: 10px; 
+    border-radius: 2px;
+}
