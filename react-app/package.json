@@ -2,6 +2,7 @@
   "name": "react-app",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://194.67.67.101",
   "dependencies": {
     "-": "0.0.1",
     "@testing-library/jest-dom": "^5.16.5",
