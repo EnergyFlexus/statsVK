@@ -6,40 +6,13 @@ import ChatPreviewCard from '../Components/Chats/ChatPreview/ChatPreviewCard';
 import SearchPanel from '../Components/Chats/SearchPanel/SearchPanel';
 import Loading from '../Components/Loading';
 
-// Для тестирования fetch
-const testUrl = 'https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits';
-// Тестирование UI
-const testItems = [
-	{
-		id: 8,
-		name: 'Чат номер один',
-		countMembers: 12,
-		countMessages: 158,
-		lastMessageDate: 2.5,
-	},
-	{
-		id: 1,
-		name: 'Чат номер два',
-		countMembers: 13,
-		countMessages: 120,
-		lastMessageDate: 3.5,
-	},
-	{
-		id: 2,
-		name: 'Чат номер три',
-		countMembers: 14,
-		countMessages: 1000,
-		lastMessageDate: 1.1,
-	},
-];
-
 function Chats() {
-	const allItems = testItems;
-
-	const [items, setItems] = useState(testItems);
-	const [isLoaded, setIsLoaded] = useState(true);
+	const [allItems, setAllItems] = useState([]);
+	const [items, setItems] = useState([]);
+	const [isLoaded, setIsLoaded] = useState(false);
 	const [error, setError] = useState();
 	const [searchString, setSearchString] = useState('');
+
 
 	const setSearch = ((search) => {
 		const reg = RegExp(search, 'iu');
@@ -47,19 +20,23 @@ function Chats() {
 		setItems(_items);
 		setSearchString(search);
 	});
-	// Как Леха (который снюсоед) сделает бэк - поменять
-	console.log('keka');
-	// useEffect(() => {
-	// 	fetch('api/MessagesCountsInChatsAll')
-	// 	.then(res => res.json())
-	// 	.then((result) => {
-	// 		setIsLoaded(true);
-	// 	},
-	// 	(error) => {
-	// 		setError(error);
-	// 		setIsLoaded(false);
-	// 	});
-	//  }, []);
+	useEffect(() => {
+		const allChatsUrl = '/api/ChatsAll';
+		/**
+		 * @param {Array} ids
+		 * @return {String}
+		 */
+		const chatInfo = (id) => (`/api/vk/ChatInfoById?${id.map()}`)
+		const fetching = (async (url) => {
+			try {
+				let res = await fetch(url);
+				res = await res.json();
+				return res;
+			} catch (error) {
+				setError(error);
+			}
+		});
+	}, []);
 	if (error) {
 		return (
 		<>
