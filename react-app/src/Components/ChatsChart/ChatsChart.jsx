@@ -42,12 +42,13 @@ const chartOptions = {
 };
 
 const showChartAs = {
-	Week: 0,
-	Month: 1,
+	Day: 0,
+	Week: 1,
 	Year: 2
 };
 
 const unixTime = {
+	Hour: 3600000,
 	Day: 86400000,
 	Week: 604800000,
 	Month: 2629743000,
@@ -55,8 +56,8 @@ const unixTime = {
 }
 
 function ChatsChart(props) {
-	const [showAs, setShowAs] = useState(showChartAs.Week);
-	const [text, setText] = useState("Статистика за неделю");
+	const [showAs, setShowAs] = useState(showChartAs.Day);
+	const [text, setText] = useState("Статистика за день");
 	const [isLoaded, setIsLoaded] = useState(false);
 	const [error, setError] = useState();
 	const [chartData, setChartData] = useState({});
@@ -84,25 +85,28 @@ function ChatsChart(props) {
 			let res = [];
 			let labels = [];
 			switch (showAs) {
+				case showChartAs.Day:
+					border = border - unixTime.Day;
+					for (let i = 0; i <= 24; i += 1) {
+						res.push(await fetching(Math.floor(border / 1000), Math.floor((border + unixTime.Hour) / 1000)));
+						labels[i] = new Date(border).toLocaleTimeString();
+						border += unixTime.Hour;
+					}
+				break;
 				case showChartAs.Week:
 					border = border - unixTime.Week;
 					for (let i = 0; i <= 7; i += 1) {
-						res.push(await fetching(Math.floor(border / 1000), Math.floor((border + unixTime.Day * i) / 1000)));
-						labels[i] = new Date(border + unixTime.Day * i).toLocaleDateString();
-					}
-				break;
-				case showChartAs.Month:
-					border = border - unixTime.Month;
-					for (let i = 0; i <= 4; i += 1) {
-						res.push(await fetching(Math.floor(border / 1000), Math.floor((border + unixTime.Week * i) / 1000)));
-						labels[i] = new Date(border + unixTime.Week * i).toLocaleDateString();
+						res.push(await fetching(Math.floor(border / 1000), Math.floor((border + unixTime.Day) / 1000)));
+						labels[i] = new Date(border).toLocaleDateString();
+						border += unixTime.Day;
 					}
 				break;
 				case showChartAs.Year:
 					border = border - unixTime.Year;
 					for (let i = 0; i <= 12; i += 1) {
-						res.push(await fetching(Math.floor(border / 1000), Math.floor((border + unixTime.Month * i) / 1000)));
-						labels[i] = new Date(border + unixTime.Month * i).toLocaleDateString();
+						res.push(await fetching(Math.floor(border / 1000), Math.floor((border + unixTime.Month) / 1000)));
+						labels[i] = new Date(border).toLocaleDateString();
+						border += unixTime.Month;
 					}
 				break;
 				default:
@@ -140,11 +144,11 @@ function ChatsChart(props) {
 							{text}
 						</DropdownToggle>
 						<DropdownMenu variant="dark">
+							<Dropdown.Item onClick={event => {changeText(showChartAs.Day, 'Статистика за день')}}>
+								Статистика за день
+							</Dropdown.Item>
 							<Dropdown.Item onClick={event => {changeText(showChartAs.Week, 'Статистика за неделю')}}>
 								Статистика за неделю
-							</Dropdown.Item>
-							<Dropdown.Item onClick={event => {changeText(showChartAs.Month, 'Статистика за месяц')}}>
-								Статистика за месяц
 							</Dropdown.Item>
 							<Dropdown.Item onClick={event => {changeText(showChartAs.Year, 'Статистика за год')}}>
 								Статистика за год
