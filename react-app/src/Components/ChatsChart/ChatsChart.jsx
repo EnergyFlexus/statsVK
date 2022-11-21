@@ -86,21 +86,21 @@ function ChatsChart(props) {
 			switch (showAs) {
 				case showChartAs.Week:
 					border = border - unixTime.Week;
-					for (let i = 0; i < 7; i += 1) {
+					for (let i = 0; i <= 7; i += 1) {
 						res.push(await fetching(Math.floor(border / 1000), Math.floor((border + unixTime.Day * i) / 1000)));
 						labels[i] = new Date(border + unixTime.Day * i).toLocaleDateString();
 					}
 				break;
 				case showChartAs.Month:
 					border = border - unixTime.Month;
-					for (let i = 0; i < 4; i += 1) {
+					for (let i = 0; i <= 4; i += 1) {
 						res.push(await fetching(Math.floor(border / 1000), Math.floor((border + unixTime.Week * i) / 1000)));
 						labels[i] = new Date(border + unixTime.Week * i).toLocaleDateString();
 					}
 				break;
 				case showChartAs.Year:
 					border = border - unixTime.Year;
-					for (let i = 0; i < 12; i += 1) {
+					for (let i = 0; i <= 12; i += 1) {
 						res.push(await fetching(Math.floor(border / 1000), Math.floor((border + unixTime.Month * i) / 1000)));
 						labels[i] = new Date(border + unixTime.Month * i).toLocaleDateString();
 					}
