@@ -4,13 +4,38 @@ import { useParams } from 'react-router-dom';
 import { useFetch } from '../hooks/useFetch';
 import ChatBlock from '../Components/Chat/ChatBlock'; 
 import MembersBlock from '../Components/Members/MembersBlock';
+import ChatHeader from '../Components/ChatHeader/ChatHeader';
 
 function Chat() {
 	const params = useParams();
-	params.chatId = 8;
+	params.chatId = 8; 
+	const [chatInfo, setChatInfo] = useState({});
+	const [fetchingChatInfo, isChatInfoLoading] = useFetch(async () => {
+		let res = await fetch(`/api/vk/ChatInfoById?chat_ids=${params.chatId}`);
+		res = await res.json();
+		res = res[0];
+
+		let resCountMsg = await fetch(`/api/MessagesCountsByChatId/${params.chatId}`);
+		resCountMsg = await resCountMsg.json();
+		
+		const ownerInMembmerArr = members.find(member => member.id === res.owner_id);
+		setChatInfo({
+			...chatInfo,
+			name: res.title,
+			avatar: res.photo.photo_100,
+			countMembers: res.members_count,
+			countMessages: resCountMsg,
+			ownerName: `${ownerInMembmerArr.first_name} ${ownerInMembmerArr.last_name}`,
+		});
+	});
+	const [favoritesStatus, setFavoritesStatus] = useState(false);
+	const [fetchingSetFavorites, isFavoritesLoading] = useFetch(async () => {
+		await new Promise(resolve => setTimeout(resolve, 1000));
+		setFavoritesStatus(!favoritesStatus);
+	});
 	const [messages, setMessages] = useState([]);	
 	const [members, setMembers] = useState([]);
-	const [membersFetching, isMembersLoading, membersError] = useFetch(async () => {
+	const [membersFetching, isMembersLoading] = useFetch(async () => {
 		let res = await fetch(`/api/ChatUsersByChatId/${params.chatId}`);
 		res = await res.json();
 
@@ -27,7 +52,7 @@ function Chat() {
 		resVk = resVk.sort((a,b) => b.messages_count - a.messages_count);
 		setMembers(resVk);
 	});
-	const [msgsFetching, isMsgsLoading, msgsError] = useFetch(async () => {
+	const [msgsFetching, isMsgsLoading] = useFetch(async () => {
 		let res = await fetch('/api/messagesAll');
 		res = await res.json();
 		res = res.map(msg => {
@@ -47,19 +72,31 @@ function Chat() {
 	}, []);
 
 	useEffect(() => {
-		if(!isMembersLoading && members.length > 0)
+		if(!isMembersLoading && members.length > 0) {
+			fetchingChatInfo();
 			msgsFetching();
+		}
 	}, [isMembersLoading]);
-
-
-	useEffect(() => {
-		console.log(msgsError && msgsError);
-		console.log(membersError && membersError);
-	}, [msgsError, membersError]);
 
 	return (
 		<Container>
-			<Row className='justify-content-xl-center mt-5' style={{height: '530px'}}>
+			<Row className='justify-content-xl-center mt-5'>
+				<Col md={12} xl={10}>
+					<ChatHeader
+						showSkeleton={isChatInfoLoading || isMembersLoading}
+						avatar={'https://sun1-85.userapi.com/s/v1/ig2/XLI3bEgl2lhsyWPSPSQTbS1WkgI8YaJLflcennaidODonF2PulZBhtayWBRynxVd8O5d1v0UlsPvrxjfEAicc-Ou.jpg?size=200x0&quality=96&crop=0,0,992,992&ava=1'}
+						name={chatInfo.name}
+						hasInFavorites={favoritesStatus}
+						lockFavoritesBtn={isFavoritesLoading}
+						ownerName={chatInfo.ownerName}
+						countMessages={chatInfo.countMessages}
+						countMembers={chatInfo.countMembers}
+
+						onChangeFavorites={fetchingSetFavorites}
+					/>
+				</Col>
+			</Row>
+			<Row className='justify-content-xl-center mt-3' style={{height: '530px'}}>
 				<Col md={7} xl={6} className='h-100'>
 					<div className='d-flex flex-column h-100'>
 						<h2 className='text-center'>Сообщения</h2>
@@ -87,22 +124,8 @@ function Chat() {
 							</Card.Body>
 						</Card>
 					</div>
-					<div className='d-flex flex-column h-50 pt-4'>
-						<h2 className='text-center'>О чате</h2>
-						<Card className='h-100'>
-							<ListGroup variant="flush">
-								<ListGroup.Item><span><b>Создатель:</b> Алексей Нагаев</span></ListGroup.Item>
-								<ListGroup.Item><span><b>Количество участников:</b> 4</span></ListGroup.Item>
-								<ListGroup.Item><span><b>Количество сообщений:</b> 12 500</span></ListGroup.Item>
-							</ListGroup>
-							<Card.Body>
-								<Button className='w-100' variant="success">Скачать чат</Button>
-							</Card.Body>
-						</Card>
-					</div>
 				</Col>
 			</Row>
-			<h1 className='mt-5'>ЕБАНАЯ ВЕРТСКА Я ЕЁ РОТ ЕБАЛ ПРОСТО</h1>
 		</Container>
 	);
 }
