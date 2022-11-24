@@ -10,10 +10,12 @@ import {
 } from "chart.js";
 
 import React, { useState} from "react";
-import { Container, Row, Col, ToggleButton, ToggleButtonGroup, Dropdown} from 'react-bootstrap'
+import { useEffect } from "react";
+import { Container, Row, Col, Dropdown} from 'react-bootstrap'
 import DropdownMenu from "react-bootstrap/esm/DropdownMenu";
 import DropdownToggle from "react-bootstrap/esm/DropdownToggle";
 import { Line } from "react-chartjs-2";
+import Loading from "../Loading";
 
    
 ChartJS.register(
@@ -38,67 +40,100 @@ const chartOptions = {
 		},
 	},
 };
-// Тестоыые данные, в будущем они будут браться из fetch
-const chartData1 = {
-	labels: [1,46,7,32],
-	datasets: [
-		{
-		label: "Количество посещений",
-		data: [1,2,3,4,5,6],
-		borderColor: "rgb(53, 162, 235)",
-		backgroundColor: "rgba(53, 162, 235, 0.4)",
-		},
-	],
-};
-
-const chartData2 = {
-	labels: [1,2,3,4],
-	datasets: [
-		{
-		label: "Количество посещений",
-		data: [1,2,3,4],
-		borderColor: "rgb(53, 162, 235)",
-		backgroundColor: "rgba(53, 162, 235, 0.4)",
-		},
-	],
-};
-
-const chartData3 = {
-	labels: [1,2,5,33],
-	datasets: [
-		{
-		label: "Количество посещений",
-		data: [1,2,3,4,5,67],
-		borderColor: "rgb(53, 162, 235)",
-		backgroundColor: "rgba(53, 162, 235, 0.4)",
-		},
-	],
-};
 
 const showChartAs = {
-	Week: 0,
-	Month: 1,
+	Day: 0,
+	Week: 1,
 	Year: 2
 };
 
+const unixTime = {
+	Hour: 3600000,
+	Day: 86400000,
+	Week: 604800000,
+	Month: 2629743000,
+	Year: 31556926000 
+}
 
-
-
-function ChatsChart() {
-	const [showAs, setShowAs] = useState(showChartAs.Week)
+function ChatsChart(props) {
+	const [showAs, setShowAs] = useState(showChartAs.Day);
+	const [text, setText] = useState("Статистика за день");
+	const [isLoaded, setIsLoaded] = useState(false);
+	const [error, setError] = useState();
+	const [chartData, setChartData] = useState({});
+	// Убрать || 8 как будут пропсы
+	const id = props.id || 8;
 	let chart;
-	switch (showAs) {
-		case showChartAs.Week:
-			chart = <Line options={chartOptions} data={chartData1} />
-		break;
-		case showChartAs.Month:
-			chart = <Line options={chartOptions} data={chartData2} />
-		break;
-		case showChartAs.Year:
-			chart = <Line options={chartOptions} data={chartData3} />
-		break;
-		default:
-		break;
+	const changeText = ((showAs, text) => {
+		setIsLoaded(false);
+		setShowAs(showAs);
+		setText(text);
+	});
+	useEffect(() => {
+		const getUrl = (date1, date2) => (`/api/MessagesCountsByChatIdDate/${id}/${date1}/${date2}`);
+		const fetching = (async (date1, date2) => {
+			try {
+				let res = await fetch(getUrl(date1, date2));
+				res = await res.json();
+				return res;
+			} catch (error) {
+				setError(error);
+			}
+		});
+		const getChartData = (async () => {
+			let border = Date.now();
+			let res = [];
+			let labels = [];
+			switch (showAs) {
+				case showChartAs.Day:
+					border = border - unixTime.Day;
+					for (let i = 0; i <= 24; i += 1) {
+						res.push(await fetching(Math.floor(border / 1000), Math.floor((border + unixTime.Hour) / 1000)));
+						labels[i] = new Date(border).toLocaleTimeString();
+						border += unixTime.Hour;
+					}
+				break;
+				case showChartAs.Week:
+					border = border - unixTime.Week;
+					for (let i = 0; i <= 7; i += 1) {
+						res.push(await fetching(Math.floor(border / 1000), Math.floor((border + unixTime.Day) / 1000)));
+						labels[i] = new Date(border).toLocaleDateString();
+						border += unixTime.Day;
+					}
+				break;
+				case showChartAs.Year:
+					border = border - unixTime.Year;
+					for (let i = 0; i <= 12; i += 1) {
+						res.push(await fetching(Math.floor(border / 1000), Math.floor((border + unixTime.Month) / 1000)));
+						labels[i] = new Date(border).toLocaleDateString();
+						border += unixTime.Month;
+					}
+				break;
+				default:
+				break;
+			}
+			setIsLoaded(true);
+			setChartData({
+				labels: labels,
+				datasets: [
+					{
+					label: "Количество сообщений",
+					data: res,
+					borderColor: "rgb(53, 162, 235)",
+					backgroundColor: "rgba(53, 162, 235, 0.4)",
+					},
+				],
+			});
+		});
+		getChartData();
+	}, [showAs, id]);
+
+	if(error) {
+		chart = <>Error: {error.message} </>
+	} else if(isLoaded) {
+		chart = <Line options={chartOptions} data={chartData} />
+	} else {
+		chart = <Loading/>
 	}
     return (
         <Container>
@@ -106,19 +141,18 @@ function ChatsChart() {
                 <Col>
 					<Dropdown>
 						<DropdownToggle variant="secondary" className="mt-2">
-							Статистика чатов
+							{text}
 						</DropdownToggle>
 						<DropdownMenu variant="dark">
-							<Dropdown.Item onClick={event => {setShowAs(showChartAs.Week)}}>
+							<Dropdown.Item onClick={event => {changeText(showChartAs.Day, 'Статистика за день')}}>
+								Статистика за день
+							</Dropdown.Item>
+							<Dropdown.Item onClick={event => {changeText(showChartAs.Week, 'Статистика за неделю')}}>
 								Статистика за неделю
 							</Dropdown.Item>
-							<Dropdown.Item onClick={event => {setShowAs(showChartAs.Month)}}>
-								Статистика за месяц
-							</Dropdown.Item>
-							<Dropdown.Item onClick={event => {setShowAs(showChartAs.Year)}}>
+							<Dropdown.Item onClick={event => {changeText(showChartAs.Year, 'Статистика за год')}}>
 								Статистика за год
 							</Dropdown.Item>
-							
 						</DropdownMenu>
 					</Dropdown>
                 </Col>
