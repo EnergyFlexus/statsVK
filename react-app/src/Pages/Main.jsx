@@ -1,5 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Container, Row, Col, Button} from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import wk from '../assets/icons-main/wk.png';
 function Main() {
 	return (
@@ -19,9 +20,11 @@ function Main() {
                                             window.open('https://vk.com/club181354529')
                                         }}>Добавить бота</Button>
                                                 
-                                        <Button variant='outline-light' href='/faq'>
+                                        <Link to="/faq">
+                                            <Button variant='outline-light'>
                                                 Получить помощь
-                                        </Button>
+                                            </Button>
+                                        </Link>
                                     </div>
                                 </div>
                             </Col>
