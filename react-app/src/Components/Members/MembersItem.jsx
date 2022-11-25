@@ -1,5 +1,6 @@
 import React from 'react'
 import { Placeholder } from 'react-bootstrap';
+import declinationOfNum from '../../functions/declinationOfNum';
 import s from './MembersItem.module.css';
 
 /*
@@ -33,7 +34,7 @@ function MembersItem(props) {
                     <div className={s.firstRow}>
                         <a href={userUrlVkProfile} target="_blank" rel="noreferrer"><span className={s.author}>{props.name}</span></a>
                     </div>
-                    <div className={s.lastRow}>{`${props.messagesCount} сообщений`}</div>
+                    <div className={s.lastRow}>{`${props.messagesCount} ${declinationOfNum(props.messagesCount, ['сообщение', 'сообщения', 'сообщений'])}`}</div>
                 </div>
             </div>
         )

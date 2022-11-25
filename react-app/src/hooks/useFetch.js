@@ -1,7 +1,13 @@
 import { useState } from "react"
 
-export const useFetch = (callback) => {
-    const [isLoading, setIsLoading] = useState(false);
+/**
+ * Хук запроса
+ * @param {function(...args)} callback - Колбек запроса 
+ * @param {boolean} initStatusLoadnig - Начальный статус загрузки
+ * @returns {Array<function, boolean, object>} Колбек запроса, идёт ли запрос, ошибка
+ */
+export const useFetch = (callback, initStatusLoadnig = false) => {
+    const [isLoading, setIsLoading] = useState(!!initStatusLoadnig);
     const [error, setError] = useState('');
 
     const fetching = async () => {

@@ -17,14 +17,20 @@
 
 .skeletonName {
     width: 150px;
-    height: 20px;
+    height: 25px;
     display: block;
     border-radius: 4px;
 }
 
-.skeletonButton {
-    width: 115px;
+.skeletonButtonSave {
+    width: 100px;
     height: 30px;
+}
+
+.skeletonButtonFavorites {
+    width: 30px;
+    height: 30px;
+    margin-left: 0.5rem;
 }
 
 .skeletonTableTitle {
