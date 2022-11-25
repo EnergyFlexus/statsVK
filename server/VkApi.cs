@@ -588,7 +588,9 @@ namespace VkApi
 
 			foreach(JsonObject? a in arr)
 			{
+				long id = (long)a!["peer"]!["id"]!;
 				JsonObject cs = (JsonObject)a!["chat_settings"]!;
+				cs.Add(new KeyValuePair<string, JsonNode?>("id", id - VkClient.const_peer_id));
 				cs.Remove("admin_ids");
 				cs.Remove("is_group_channel");
 				cs.Remove("acl");
