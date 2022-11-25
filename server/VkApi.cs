@@ -84,6 +84,14 @@ namespace VkApi
 				await api.MessagesCountsByChatId(context, vkDbContext, id);
 			});
 
+			group.MapGet("/MessagesCountsByChatIdDate/{id:int}/{date1:int}/{date2:int?}", // + order
+				async (HttpContext context, VkDbContext vkDbContext, Api api, long id, long date1, long? date2) => {
+
+				var order = context.Request.Query["order"];
+				ApiOrder ord = Api.ParseOrder(order);
+				await api.MessagesCountsByChatIdDate(context, vkDbContext, id, date1, date2);
+			});
+
 			group.MapGet("/MessagesCountsByChatIdDateIntervals/{id:int}/{interval:int}/{date1:int}/{date2:int?}",
 				async (HttpContext context, VkDbContext vkDbContext, Api api, long id, long interval, long date1, long? date2) => {
 					
@@ -362,8 +370,8 @@ namespace VkApi
 
 		public async Task MessagesCount(HttpContext context, VkDbContext vkDbContext)
 		{
-			long count = (from cu in vkDbContext.chat_users
-				select cu.messages_count).Sum();
+			long count = await (from cu in vkDbContext.chat_users
+				select cu.messages_count).SumAsync();
 
 			await Results.Json(count).ExecuteAsync(context);
 		}
@@ -389,7 +397,7 @@ namespace VkApi
 
 		public async Task MessagesCountsByChatId(HttpContext context, VkDbContext vkDbContext, long id)
 		{
-			var messages_count = vkDbContext.chat_users.Sum(cu => cu.messages_count);
+			var messages_count = await vkDbContext.chat_users.SumAsync(cu => cu.messages_count);
 			await Results.Json(messages_count).ExecuteAsync(context);
 		}
 
@@ -401,7 +409,7 @@ namespace VkApi
 
 			var counts = await (from m in vkDbContext.messages
 				where m.date >= date1 && m.date < date2 && m.chat_id == id
-				select m).CountAsync();
+				select m).LongCountAsync();
 
 			await Results.Json(counts).ExecuteAsync(context);	
 		}
@@ -472,7 +480,7 @@ namespace VkApi
 
 		public async Task ChatsCount(HttpContext context, VkDbContext vkDbContext)
 		{
-			long count = vkDbContext.chats.Count();
+			long count = await vkDbContext.chats.LongCountAsync();
 			await Results.Json(count).ExecuteAsync(context);
 		}
 
@@ -545,7 +553,7 @@ namespace VkApi
 
 		public async Task ChatUsersCount(HttpContext context, VkDbContext vkDbContext)
 		{
-			long count = vkDbContext.chat_users.Count();
+			long count = await vkDbContext.chat_users.LongCountAsync();
 			await Results.Json(count).ExecuteAsync(context);
 		}
 
