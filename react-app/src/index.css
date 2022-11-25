@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100vh;
 }
 
 code {
@@ -27,3 +28,13 @@ a {
   text-align: left;
 }
 
+#root {
+  height: 100%;
+}
+
+#root > div {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  
+}
