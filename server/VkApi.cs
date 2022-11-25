@@ -64,6 +64,12 @@ namespace VkApi
 				await api.MessagesByChatIdDate(context, vkDbContext, id, date1, date2, ord);
 			});
 
+			group.MapGet("/MessagesCount", 
+				async (HttpContext context, VkDbContext vkDbContext, Api api) => {
+				
+				await api.MessagesCount(context, vkDbContext);
+			});
+
 			group.MapGet("/MessagesCountsInChatsAll", // + order
 				async (HttpContext context, VkDbContext vkDbContext, Api api) => {
 				
@@ -77,10 +83,11 @@ namespace VkApi
 				
 				await api.MessagesCountsByChatId(context, vkDbContext, id);
 			});
-			group.MapGet("/MessagesCountsByChatIdDate/{id:int}/{date1:int}/{date2:int?}",
-				async (HttpContext context, VkDbContext vkDbContext, Api api, long id, long date1, long? date2) => {
 
-				await api.MessagesCountsByChatIdDate(context, vkDbContext, id, date1, date2);
+			group.MapGet("/MessagesCountsByChatIdDateIntervals/{id:int}/{interval:int}/{date1:int}/{date2:int?}",
+				async (HttpContext context, VkDbContext vkDbContext, Api api, long id, long interval, long date1, long? date2) => {
+					
+				await api.MessagesCountsByChatIdDateIntervals(context, vkDbContext, id, interval, date1, date2);
 			});
 
 			group.MapGet("/ChatsAll", // + order
@@ -95,6 +102,12 @@ namespace VkApi
 				async (HttpContext context, VkDbContext vkDbContext, Api api, long id) => {
 
 				await api.ChatById(context, vkDbContext, id);
+			});
+
+			group.MapGet("/ChatsCount", 
+				async (HttpContext context, VkDbContext vkDbContext, Api api) => {
+
+				await api.ChatsCount(context, vkDbContext);
 			});
 
 			group.MapGet("/ChatUsersAll", 
@@ -123,6 +136,12 @@ namespace VkApi
 				async (HttpContext context, VkDbContext vkDbContext, Api api, long chat_id, long user_id) => {
 				
 				await api.ChatUserByIds(context, vkDbContext, chat_id, user_id);
+			});
+
+			group.MapGet("/ChatUsersCount", 
+				async (HttpContext context, VkDbContext vkDbContext, Api api) => {
+
+				await api.ChatUsersCount(context, vkDbContext);
 			});
 
 			group.MapGet("/vk/UsersInfoByChatId/{id:int}",
@@ -341,6 +360,14 @@ namespace VkApi
 			await Results.Json(messages_DTO).ExecuteAsync(context);
 		}
 
+		public async Task MessagesCount(HttpContext context, VkDbContext vkDbContext)
+		{
+			long count = (from cu in vkDbContext.chat_users
+				select cu.messages_count).Sum();
+
+			await Results.Json(count).ExecuteAsync(context);
+		}
+
 		public async Task MessagesCountsInChatsAll(HttpContext context, VkDbContext vkDbContext, ApiOrder order)
 		{
 			var messages_counts = vkDbContext.chats.Include(c => c.chat_users)
@@ -379,6 +406,42 @@ namespace VkApi
 			await Results.Json(counts).ExecuteAsync(context);	
 		}
 
+		public async Task MessagesCountsByChatIdDateIntervals
+			(HttpContext context, VkDbContext vkDbContext, long id, long interval, long date1, long? date2)
+		{
+			var chat = await vkDbContext.chats.FindAsync(id);
+			if(chat is null)
+			{
+				await Results.Json(new List<long>()).ExecuteAsync(context);
+				return;
+			}
+
+			List<long> messages_dates_intervals = new List<long>();
+
+			// 1 November 2022, 0:00:00
+			if(date1 < 1667260800)
+				date1 = 1667260800;
+
+			// 1 November 2022, 0:00:00
+			if(date2 is null || date2 == 0 || date2 > chat.last_message_date)
+				date2 = chat.last_message_date;
+
+			var messages_dates = (from m in vkDbContext.messages
+				where m.chat_id == id && m.date < date2 && m.date >= date1
+				orderby m.date descending
+				select m.date).ToList();
+
+			for(long i = date1, j = date1 + interval; i < date2; i += interval, j += interval)
+			{
+				long messages_count = (from md in messages_dates
+					where md >= i && md < j
+					select md).LongCount();
+
+				messages_dates_intervals.Add(messages_count);
+			}
+			await Results.Json(messages_dates_intervals).ExecuteAsync(context);
+		}
+
 		public async Task ChatsAll(HttpContext context, VkDbContext vkDbContext, ApiOrder order)
 		{
 			IQueryable<ChatDTO> chats_DTO;
@@ -405,6 +468,12 @@ namespace VkApi
 
 			if(chat is null) await Results.Json(null).ExecuteAsync(context);
 			else await Results.Json(new ChatDTO(chat)).ExecuteAsync(context);
+		}
+
+		public async Task ChatsCount(HttpContext context, VkDbContext vkDbContext)
+		{
+			long count = vkDbContext.chats.Count();
+			await Results.Json(count).ExecuteAsync(context);
 		}
 
 		public async Task ChatUsersAll(HttpContext context, VkDbContext vkDbContext)
@@ -472,6 +541,12 @@ namespace VkApi
 
 			if(chat_user is null) await Results.Json(null).ExecuteAsync(context);
 			else await Results.Json(new ChatUserDTO(chat_user)).ExecuteAsync(context);
+		}
+
+		public async Task ChatUsersCount(HttpContext context, VkDbContext vkDbContext)
+		{
+			long count = vkDbContext.chat_users.Count();
+			await Results.Json(count).ExecuteAsync(context);
 		}
 
 		public async Task UsersInfoByChatId(HttpContext context, VkDbContext vkDbContext, long id)
