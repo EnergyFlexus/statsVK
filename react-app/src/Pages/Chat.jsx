@@ -5,6 +5,7 @@ import { useFetch } from '../hooks/useFetch';
 import ChatBlock from '../Components/Chat/ChatBlock'; 
 import MembersBlock from '../Components/Members/MembersBlock';
 import ChatHeader from '../Components/ChatHeader/ChatHeader';
+import ChatChartCountMessages from '../Components/ChatsCharts/ChartChatCountMessages/ChatChartCountMessages';
 
 function Chat() {
 	const params = useParams();
@@ -124,6 +125,13 @@ function Chat() {
 							</Card.Body>
 						</Card>
 					</div>
+			<Row className='justify-content-xl-center mt-4'>
+				<Col md={12} xl={10}>
+					<Card className='h-100'>
+						<Card.Body className='h-100'>
+							<ChatChartCountMessages id={params.chatId}/>
+						</Card.Body>
+					</Card>
 				</Col>
 			</Row>
 		</Container>

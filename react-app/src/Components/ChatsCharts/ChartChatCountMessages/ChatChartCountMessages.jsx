@@ -7,6 +7,7 @@ import {
     Tooltip,
     Legend,
     PointElement,
+	Filler,
 } from "chart.js";
 
 import React, { useState} from "react";
@@ -15,30 +16,31 @@ import { Container, Row, Col, Dropdown} from 'react-bootstrap'
 import DropdownMenu from "react-bootstrap/esm/DropdownMenu";
 import DropdownToggle from "react-bootstrap/esm/DropdownToggle";
 import { Line } from "react-chartjs-2";
-import Loading from "../Loading";
+import Loading from "../../Loading";
 
    
 ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    LineElement,
-    PointElement,
-    Title,
-    Tooltip,
-    Legend
+	CategoryScale,
+	LinearScale,
+	PointElement,
+	LineElement,
+	Filler,
+	Title,
+	Tooltip,
+	Legend
 );
 
 const chartOptions = {
 	responsive: true,
 	plugins: {
 		legend: {
-		position: "top",
+			display: false,
 		},
 		title: {
-		display: true,
-		text: "Статистика",
+			display: false,
 		},
 	},
+	maintainAspectRatio: false
 };
 
 const showChartAs = {
@@ -55,14 +57,13 @@ const unixTime = {
 	Year: 31556926000 
 }
 
-function ChatsChart(props) {
+function ChatChartCountMessages(props) {
 	const [showAs, setShowAs] = useState(showChartAs.Day);
 	const [text, setText] = useState("Статистика за день");
 	const [isLoaded, setIsLoaded] = useState(false);
 	const [error, setError] = useState();
 	const [chartData, setChartData] = useState({});
-	// Убрать || 8 как будут пропсы
-	const id = props.id || 8;
+	const id = props.id;
 	let chart;
 	const changeText = ((showAs, text) => {
 		setIsLoaded(false);
@@ -117,10 +118,10 @@ function ChatsChart(props) {
 				labels: labels,
 				datasets: [
 					{
-					label: "Количество сообщений",
-					data: res,
-					borderColor: "rgb(53, 162, 235)",
-					backgroundColor: "rgba(53, 162, 235, 0.4)",
+						fill: true,
+						data: res,
+						borderColor: "rgb(53, 162, 235)",
+						backgroundColor: "rgba(53, 162, 235, 0.5)"
 					},
 				],
 			});
@@ -140,7 +141,7 @@ function ChatsChart(props) {
             <Row>
                 <Col>
 					<Dropdown>
-						<DropdownToggle variant="secondary" className="mt-2">
+						<DropdownToggle variant="secondary" className="mb-3">
 							{text}
 						</DropdownToggle>
 						<DropdownMenu variant="dark">
@@ -166,4 +167,4 @@ function ChatsChart(props) {
     );
   }
 
-export default ChatsChart;
+export default ChatChartCountMessages;
