@@ -1,0 +1,12 @@
+.main {
+    overflow: auto;
+    height: 100%;
+}
+
+.itemMargin {
+    margin-top: 15px;
+}
+
+.itemMarginSmall {
+    margin-top: 5px;
+}

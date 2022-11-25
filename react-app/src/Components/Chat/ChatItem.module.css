@@ -1,0 +1,47 @@
+.main {
+    display: flex;
+    align-items: flex-start;
+}
+
+.none {
+    display: none;
+}
+
+.avatar {
+    width: 35px;
+    height: 35px;
+    background-size: cover;
+    border-radius: 20px;
+}
+
+
+.content {
+    margin-left: 15px;
+    font-size: 14px;
+}
+
+.contentPadding {
+    padding-left: 35px;
+}
+
+.skeletonLastRow {
+    width: 200px;
+    min-height: 10px; 
+    border-radius: 2px;
+}
+
+.author {
+    color: #2a5885; 
+    font-weight: bold;
+}
+
+.skeletonAuthor {
+    width: 120px;
+    min-height: 12px;
+    border-radius: 2px;
+}
+
+.date {
+    margin-left: 10px;
+    color: rgb(102, 102, 102);
+}
