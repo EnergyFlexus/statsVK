@@ -10,8 +10,9 @@ function Main() {
     const [isLoaded, setIsLoaded] = useState(false);
     let footer;
     useEffect(() => {
-        const getUrl = '/api/MessagesCountsInChatsAll?order=desc';
-        const getUsersUrl = '/api/ChatUsersAll';
+        const getCountUsers = '/api/ChatUsersCount';
+        const getCountMessages = '/api/MessagesCount';
+        const getChatsCount = '/api/ChatsCount';
         const fetching = (async (url) => {
 			try {
 				let res = await fetch(url);
@@ -27,15 +28,10 @@ function Main() {
                 chats_count: 0,
                 users_count: 0,
             };
-            let items = await fetching(getUrl);
-            for(let item of items) {
-                result.messages_count += item.messages_count;
-                result.chats_count += 1;
-            }
-            let users = await fetching(getUsersUrl);
-            for(let item of users){
-                result.users_count += 1;
-            }
+            result.messages_count = await fetching(getCountMessages);
+            result.chats_count = await fetching(getChatsCount);
+            result.users_count = await fetching(getCountUsers);
+
             return result;
         });
         const messageAr = (async () => {
