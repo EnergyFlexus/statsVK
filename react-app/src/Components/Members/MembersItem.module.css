@@ -1,0 +1,33 @@
+.main {
+    display: flex;
+    align-items: flex-start;
+}
+
+.avatar {
+    width: 35px;
+    height: 35px;
+    background-size: cover;
+    border-radius: 20px;
+}
+
+.content {
+    margin-left: 15px;
+    font-size: 14px;
+}
+
+.author {
+    color: #2a5885; 
+    font-weight: bold;
+}
+
+.skeletonAuthor {
+    width: 120px;
+    min-height: 12px;
+    border-radius: 2px;
+}
+
+.skeletonLastRow {
+    width: 80px;
+    min-height: 10px; 
+    border-radius: 2px;
+}
