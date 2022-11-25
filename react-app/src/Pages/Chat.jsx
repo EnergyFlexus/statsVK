@@ -6,6 +6,7 @@ import ChatBlock from '../Components/Chat/ChatBlock';
 import MembersBlock from '../Components/Members/MembersBlock';
 import ChatHeader from '../Components/ChatHeader/ChatHeader';
 import ChatChartCountMessages from '../Components/ChatsCharts/ChartChatCountMessages/ChatChartCountMessages';
+import ChatChartMembersMessages from '../Components/ChatsCharts/ChatChartMembersMessages/ChatChartMembersMessages';
 
 function Chat() {
 	const params = useParams();
@@ -97,34 +98,44 @@ function Chat() {
 					/>
 				</Col>
 			</Row>
-			<Row className='justify-content-xl-center mt-3' style={{height: '530px'}}>
-				<Col md={7} xl={6} className='h-100'>
+			<Row className='justify-content-xl-center mt-4'>
+				<Col md={7} xl={6} style={{height: '530px'}}>
 					<div className='d-flex flex-column h-100'>
-						<h2 className='text-center'>Сообщения</h2>
 						<Card className='h-100'>
 							<Card.Body className='h-100'>
 								<ChatBlock 
 									showSkeleton={isMsgsLoading || isMembersLoading} 
-									countSkeletonItems={10} 
+									countSkeletonItems={11} 
 									messages={messages}
 								/>
 							</Card.Body>
 						</Card>						
 					</div>
 				</Col>
-				<Col md={5} xl={4} className='h-100'>
-					<div className='d-flex flex-column h-50 mt-4 mt-md-0'>
-						<h2 className='text-center'>Участники</h2>
+				<Col md={5} xl={4}>
+					<Col className='mt-4 mt-md-0' style={{height: '265px'}}>
 						<Card className='h-100'>
 							<Card.Body className='h-100'>
 								<MembersBlock 
 									showSkeleton={isMembersLoading} 
-									countSkeletonItems={4} 
+									countSkeletonItems={5} 
 									members={members}
 								/>
 							</Card.Body>
 						</Card>
-					</div>
+					</Col>
+					<Col className='pt-4' style={{height: '265px'}}>
+						<Card className='h-100'>
+							<Card.Body className='h-100'>
+								<ChatChartMembersMessages
+									usersName={members.length > 0 && members.map((user) => `${user.last_name} ${user.first_name[0]}.`)}
+									usersCountMessages={messages.length > 0 && members.map((user) => user.messages_count)}
+								/>
+							</Card.Body>
+						</Card>
+					</Col>
+				</Col>
+			</Row>
 			<Row className='justify-content-xl-center mt-4'>
 				<Col md={12} xl={10}>
 					<Card className='h-100'>
