@@ -1,20 +1,21 @@
+import { House, HouseDoor, HouseFill } from 'react-bootstrap-icons';
 import Nav from 'react-bootstrap/Nav';
 import {LinkContainer} from 'react-router-bootstrap';
+import s from './NavigationLinks.module.css'
 
-const navLinkStyle = {
-    marginTop: 3,
-}
 
 function NavigationLinks(props) {
     const pages = props.pages;
-    const listPages = pages.map((item) => (
-        <LinkContainer to = {item.link}>
-            <Nav.Link key = {item.id} style={navLinkStyle}>{item.text}</Nav.Link>
-        </LinkContainer>
-    ));
     return (
-        <Nav className = 'me-auto' >
-            {listPages};
+        <Nav className = {s.nav} >
+            {pages.map((item) => (
+                <LinkContainer to = {item.link} key = {item.link} className={s.link}>
+                    <Nav.Link>
+                        <div className={s.icon}>{item.icon}</div>
+                        <div className={s.text}>{item.text}</div>
+                    </Nav.Link>
+                </LinkContainer>
+            ))}
         </Nav> 
     );
 }
