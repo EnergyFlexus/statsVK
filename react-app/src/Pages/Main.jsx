@@ -88,7 +88,7 @@ function Main() {
                             <Col className='ms-5'>
                                 <div style={{paddingTop: '10%'}}>
                                     <h1 style ={{display:'block', fontSize:'2em',
-                                    marginTop:'0px', marginBottom:'1px',fontWeight: 'bold'}}>VKStatsBot
+                                    marginTop:'0px', marginBottom:'1px',fontWeight: 'bold', fontSize: '50px'}}>VKStatsBot
                                         <p style={{fontWeight: 'normal', fontSize: '25px'}}>Добро пожаловать на сайт бота!</p>
                                     </h1>
                                     <div>
