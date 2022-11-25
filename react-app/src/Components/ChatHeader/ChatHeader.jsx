@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button, Card, Col, Placeholder, Row, Spinner } from 'react-bootstrap'
+import { Star, StarFill } from 'react-bootstrap-icons'
 import s from './ChatHeader.module.css'
 
 /*
@@ -29,7 +30,12 @@ function ChatHeader(props) {
                                     <Placeholder.Button 
                                         variant='success'
                                         size="sm"
-                                        className={s.skeletonButton}
+                                        className={s.skeletonButtonSave}
+                                    />
+                                    <Placeholder.Button 
+                                        variant='warning'
+                                        size="sm"
+                                        className={s.skeletonButtonFavorites}
                                     />
                                 </div>
                             </Col>
@@ -63,9 +69,16 @@ function ChatHeader(props) {
                             <img src={props.avatar} className={s.avatar}></img>
                             <div className={s.info}>
                                 <h2 className={s.name}>{props.name}</h2>
-                                <Button 
-                                    variant={props.hasInFavorites ? 'outline-success' : 'success'} 
+                                <Button
+                                    variant='success'
                                     size="sm"
+                                >
+                                    Скачать .csv
+                                </Button>
+                                <Button 
+                                    variant={props.hasInFavorites ? 'outline-warning' : 'warning'}
+                                    size="sm"
+                                    className='ms-2'
                                     disabled={props.lockFavoritesBtn}
                                     onClick={(e) => props.onChangeFavorites()}
                                 >
@@ -74,12 +87,10 @@ function ChatHeader(props) {
                                             as="span"
                                             animation="border"
                                             size="sm"
-                                            role="status"
-                                            aria-hidden="true"
-                                            className='d-none d-sm-inline-block me-2'
-                                        />) : undefined
+                                        />) 
+                                        : 
+                                        props.hasInFavorites ? (<Star size={15}></Star>) : (<StarFill size={15}></StarFill>)
                                     }
-                                    {props.hasInFavorites ? 'Удалить из избранных' : 'Добавить в избранные'}
                                 </Button>
                             </div>
                         </Col>

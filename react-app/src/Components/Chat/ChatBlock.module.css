@@ -1,5 +1,8 @@
 .main {
-    overflow: auto;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column-reverse;
     height: 100%;
 }
 

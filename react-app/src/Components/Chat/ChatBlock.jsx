@@ -47,7 +47,7 @@ function ChatBlock(props) {
         return (
             <div className={s.main}>
                 {props.messages.map((msg, index) => {
-                    const isAuthorPrevious = index > 0 && msg.date - props.messages[index-1].date < 300 ? props.messages[index-1].user_id === msg.user_id : false;
+                    const isAuthorPrevious = index !== props.messages.length-1 && msg.date - props.messages[index+1].date < 300 ? props.messages[index+1].user_id === msg.user_id : false;
                     return (<div key={msg.message_id} className={isAuthorPrevious || index === 0 ? s.itemMarginSmall : s.itemMargin}>
                         <ChatItem 
                             text={msg.text}
