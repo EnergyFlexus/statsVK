@@ -11,7 +11,12 @@ import ChatChartMembersMessages from '../Components/ChatsCharts/ChatChartMembers
 function Chat() {
 	const params = useParams();
 	params.chatId = 8; 
+
 	const [chatInfo, setChatInfo] = useState({});
+	const [favoritesStatus, setFavoritesStatus] = useState(false);
+	const [messages, setMessages] = useState([]);	
+	const [members, setMembers] = useState([]);
+
 	const [fetchingChatInfo, isChatInfoLoading] = useFetch(async () => {
 		let res = await fetch(`/api/vk/ChatInfoById?chat_ids=${params.chatId}`);
 		res = await res.json();
@@ -29,14 +34,11 @@ function Chat() {
 			countMessages: resCountMsg,
 			ownerName: `${ownerInMembmerArr.first_name} ${ownerInMembmerArr.last_name}`,
 		});
-	});
-	const [favoritesStatus, setFavoritesStatus] = useState(false);
+	}, true);
 	const [fetchingSetFavorites, isFavoritesLoading] = useFetch(async () => {
 		await new Promise(resolve => setTimeout(resolve, 1000));
 		setFavoritesStatus(!favoritesStatus);
 	});
-	const [messages, setMessages] = useState([]);	
-	const [members, setMembers] = useState([]);
 	const [membersFetching, isMembersLoading] = useFetch(async () => {
 		let res = await fetch(`/api/ChatUsersByChatId/${params.chatId}`);
 		res = await res.json();
@@ -53,9 +55,9 @@ function Chat() {
 
 		resVk = resVk.sort((a,b) => b.messages_count - a.messages_count);
 		setMembers(resVk);
-	});
+	}, true);
 	const [msgsFetching, isMsgsLoading] = useFetch(async () => {
-		let res = await fetch('/api/messagesAll');
+		let res = await fetch(`/api/MessagesByChatIdOffset/${params.chatId}/50?order=desc`);
 		res = await res.json();
 		res = res.map(msg => {
 			const userInMembmerArr = members.find(member => member.id === msg.user_id);
@@ -66,7 +68,7 @@ function Chat() {
 			}
 		});
 		setMessages(res);
-	});
+	}, true);
 
 
 	useEffect(() => {
@@ -82,11 +84,11 @@ function Chat() {
 
 	return (
 		<Container>
-			<Row className='justify-content-xl-center mt-5'>
+			<Row className='justify-content-xl-center mt-4'>
 				<Col md={12} xl={10}>
 					<ChatHeader
 						showSkeleton={isChatInfoLoading || isMembersLoading}
-						avatar={'https://sun1-85.userapi.com/s/v1/ig2/XLI3bEgl2lhsyWPSPSQTbS1WkgI8YaJLflcennaidODonF2PulZBhtayWBRynxVd8O5d1v0UlsPvrxjfEAicc-Ou.jpg?size=200x0&quality=96&crop=0,0,992,992&ava=1'}
+						avatar={chatInfo.avatar}
 						name={chatInfo.name}
 						hasInFavorites={favoritesStatus}
 						lockFavoritesBtn={isFavoritesLoading}
