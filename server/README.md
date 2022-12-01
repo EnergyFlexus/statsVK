@@ -83,6 +83,14 @@ Messages:
 	[{"message_id":1,"text":"asd asd","date":1668623544,"chat_id":2,"user_id":1},
 	{"message_id":2,"text":"asd asd","date":1668623544,"chat_id":2,"user_id":1}]
 
+	# выдаст csv файл с сообщениями беседы ("messages.csv", UTF-8, разделение через табуляцию)
+	/api/MessagesByChatIdCsv/[id]
+
+	# пример
+	/api/MessagesByChatIdCsv/8
+
+	(начнется загрузка файлика)
+	
 
 	# кол-во вообще всех сообщений
 	/api/MessagesCount
