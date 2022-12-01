@@ -53,7 +53,7 @@ function Main() {
                             <Col className='ms-5'>
                                 <div style={{padding:'1%'}}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" 
-                                    class="bi bi-envelope" viewBox="0 0 16 16" style={{marginRight:'2%'}}>
+                                    className="bi bi-envelope" viewBox="0 0 16 16" style={{marginRight:'2%'}}>
                                         <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 
                                         4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 
                                         9.583l-1.326-.795-5.64 
@@ -65,8 +65,8 @@ function Main() {
                             <Col className='ms-5'>
                                 <div style={{padding:'1%'}}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" 
-                                    class="bi bi-chat-heart" viewBox="0 0 16 16" style={{marginRight:'2%'}}>
-                                        <path fill-rule="evenodd" d="M2.965 12.695a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 
+                                    className="bi bi-chat-heart" viewBox="0 0 16 16" style={{marginRight:'2%'}}>
+                                        <path fillRule="evenodd" d="M2.965 12.695a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 
                                         1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 
                                         1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2Zm-.8 
                                         3.108.02-.004c1.83-.363 2.948-.842 
@@ -80,7 +80,7 @@ function Main() {
                             <Col className='ms-5'>
                                 <div style={{padding:'1%'}}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" 
-                                    class="bi bi-people" viewBox="0 0 16 16" style={{marginRight:'2%'}}>
+                                    className="bi bi-people" viewBox="0 0 16 16" style={{marginRight:'2%'}}>
                                         <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8Zm-7.978-1A.261.261 0 
                                         0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 
                                         0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022ZM11 
