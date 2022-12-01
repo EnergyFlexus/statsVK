@@ -2,14 +2,10 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { useEffect, useState } from 'react';
 import { Container, Row, Col, Button, Placeholder} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import Loading from '../Components/Loading';
-import wk from '../assets/icons-main/wk.png';
 import s from './Main.module.css'
 import icon from '../assets/icons/logo.svg'
-import { People, PeopleFill } from 'react-bootstrap-icons';
 
 function Main() {
-    const [error, setError] = useState();
     const [items, setItems] = useState({});
     const [isLoaded, setIsLoaded] = useState(false);
 
@@ -23,7 +19,7 @@ function Main() {
 				res = await res.json();
                 return res;
 			} catch (error) {
-				setError(error);
+
 			}
 		});
         const prepareItems = (async () => {
@@ -61,7 +57,7 @@ function Main() {
                             <h1 className={s.landingTitle}>VKStatsBot</h1>
                             <h4 className={s.landingDesc}>Добро пожаловать на сайт бота!</h4>
                             <div className={s.landingButtons}>
-                                <Button variant='light' className='me-3'>Добавить бота</Button>
+                                <Button variant='light' className='me-3' href='https://vk.com/club181354529' target="_blank">Добавить бота</Button>
                                 <Link to="/faq">
                                     <Button variant='outline-light'>
                                         Получить помощь
