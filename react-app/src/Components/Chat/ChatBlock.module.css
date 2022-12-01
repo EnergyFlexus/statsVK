@@ -1,0 +1,15 @@
+.main {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column-reverse;
+    height: 100%;
+}
+
+.itemMargin {
+    margin-top: 15px;
+}
+
+.itemMarginSmall {
+    margin-top: 5px;
+}
