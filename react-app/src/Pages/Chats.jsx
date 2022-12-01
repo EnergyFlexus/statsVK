@@ -21,7 +21,10 @@ function Chats() {
 		setSearchString(search);
 	});
 	useEffect(() => {
+		// Дата последнего сообщения
 		const allChatsUrl = '/api/ChatsAll';
+		// Дата последнего сообщения
+		const messagesCountsInChats = '/api/MessagesCountsInChatsAll';
 		/**
 		 * @param {Array} ids
 		 * @return {String}
@@ -31,13 +34,45 @@ function Chats() {
 			try {
 				let res = await fetch(url);
 				res = await res.json();
-				console.log(res);
 				return res;
 			} catch (error) {
 				setError(error);
 			}
 		});
-		fetching(getChatInfoUrl([8]));
+		const getData = (async () => {
+			/**
+			 * @type {Array}
+			 */
+			let allChats = await fetching(allChatsUrl);
+			let allMessageCount = await fetching(messagesCountsInChats);
+			let allChatsMap = new Map();
+			allChats.forEach((item) => {
+				allChatsMap.set(item.chat_id, item.last_message_date);
+			});
+			allMessageCount.forEach((item) => {
+				allChatsMap.set(item.chat_id, {lastMessageDate: allChatsMap.get(item.chat_id), countMessages: item.messages_count});
+			});
+			/**
+			 * @type {Array}
+			 */
+			let allChatsInfo = await fetching(getChatInfoUrl(allChats.map((item) => (item.chat_id))));
+			let result = [];
+			console.log(allChatsInfo);
+			allChatsInfo.forEach((item) => {
+				let res = {}
+				res.id = item.id;
+				res.name = item.title;
+				res.countMembers = item.members_count;
+				res.avatar = item.photo && item.photo.photo_100;
+				res.lastMessageDate = allChatsMap.get(res.id).lastMessageDate * 1000;
+				res.countMessages = allChatsMap.get(res.id).countMessages;
+				result.push(res);
+			});
+			setAllItems(result);
+			setItems(result);
+			setIsLoaded(true);
+		});
+		getData();
 	}, []);
 	if (error) {
 		return (
