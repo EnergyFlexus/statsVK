@@ -397,8 +397,11 @@ namespace VkApi
 
 		public async Task MessagesCountsByChatId(HttpContext context, VkDbContext vkDbContext, long id)
 		{
-			var messages_count = await vkDbContext.chat_users.SumAsync(cu => cu.messages_count);
-			await Results.Json(messages_count).ExecuteAsync(context);
+			var count = await (from m in vkDbContext.messages
+				where m.chat_id == id
+				select m).LongCountAsync();
+
+			await Results.Json(count).ExecuteAsync(context);
 		}
 
 		public async Task MessagesCountsByChatIdDate
