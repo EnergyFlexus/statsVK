@@ -10,10 +10,12 @@ import SignIn from './Pages/SignIn';
 import PassReset from './Pages/PassReset';
 import Chat from './Pages/Chat';	
 import Layout from './Pages/Layout';
+import ErrorPage from './Components/Error/ErrorPage'
 
 const router = createBrowserRouter([
   	{
     	path: "/",
+		errorElement: <ErrorPage/>,
    		element: <Layout/>,
 		children: [
 			{
@@ -43,6 +45,10 @@ const router = createBrowserRouter([
 			{
 				path: "chats/:chatId",
 				element: <Chat/>,
+			},
+			{
+
+				errorElement: <ErrorPage/>,
 			},
 		]
   	},
