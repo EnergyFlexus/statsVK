@@ -64,6 +64,12 @@ namespace VkApi
 				await api.MessagesByChatIdDate(context, vkDbContext, id, date1, date2, ord);
 			});
 
+			group.MapGet("/MessagesByChatIdCsv/{id:int}", // + order
+				async (HttpContext context, VkDbContext vkDbContext, Api api, long id) => {
+
+				await api.MessagesByChatIdCsv(context, vkDbContext, id);
+			});
+
 			group.MapGet("/MessagesCount", 
 				async (HttpContext context, VkDbContext vkDbContext, Api api) => {
 				
@@ -366,6 +372,25 @@ namespace VkApi
 					select new MessageDTO(m);
 
 			await Results.Json(messages_DTO).ExecuteAsync(context);
+		}
+
+		public async Task MessagesByChatIdCsv(HttpContext context, VkDbContext vkDbContext, long id)
+		{
+			var messages_csv = from m in vkDbContext.messages
+				where m.chat_id == id
+				orderby m.message_id ascending
+				select new {m.user_id, m.date, m.text};
+
+			StringBuilder file_builder = new StringBuilder("user_id\tdate\ttext\n");
+			foreach(var m in messages_csv)
+			{
+				string text = m.text.Replace('\n', ' ');
+				file_builder.Append(m.user_id).Append('\t')
+					.Append(m.date).Append('\t')
+					.Append(text).Append('\n');
+			}
+			
+			await Results.File(Encoding.UTF8.GetBytes(file_builder.ToString()), "text/csv", "messages.csv").ExecuteAsync(context);
 		}
 
 		public async Task MessagesCount(HttpContext context, VkDbContext vkDbContext)
