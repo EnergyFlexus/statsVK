@@ -10,7 +10,6 @@ import ChatChartMembersMessages from '../Components/ChatsCharts/ChatChartMembers
 
 function Chat() {
 	const params = useParams();
-	params.chatId = 8; 
 
 	const [chatInfo, setChatInfo] = useState({});
 	const [favoritesStatus, setFavoritesStatus] = useState(false);

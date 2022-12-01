@@ -6,49 +6,73 @@ import ChatPreviewCard from '../Components/Chats/ChatPreview/ChatPreviewCard';
 import SearchPanel from '../Components/Chats/SearchPanel/SearchPanel';
 import Loading from '../Components/Loading';
 
-// Для тестирования fetch
-const testUrl = 'https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits';
-// Тестирование UI
-const testItems = [
-	{
-		id: 0,
-		name: 'Чат номер один',
-		countMembers: 12,
-		countMessages: 100,
-		frequency: 2.5,
-	},
-	{
-		id: 1,
-		name: 'Чат номер два',
-		countMembers: 13,
-		countMessages: 120,
-		frequency: 3.5,
-	},
-	{
-		id: 2,
-		name: 'Чат номер три',
-		countMembers: 14,
-		countMessages: 1000,
-		frequency: 1.1,
-	},
-];
-
 function Chats() {
+	const [allItems, setAllItems] = useState([]);
 	const [items, setItems] = useState([]);
 	const [isLoaded, setIsLoaded] = useState(false);
 	const [error, setError] = useState();
-	// Как Леха (который снюсоед) сделает бэк - поменять
+	const [searchString, setSearchString] = useState('');
+
+
+	const setSearch = ((search) => {
+		const reg = RegExp(search, 'iu');
+		const _items = allItems.filter((item) => (reg.test(item.name)));
+		setItems(_items);
+		setSearchString(search);
+	});
 	useEffect(() => {
-		fetch(testUrl)
-		.then(res => res.json())
-		.then((result) => {
+		// Дата последнего сообщения
+		const allChatsUrl = '/api/ChatsAll';
+		// Дата последнего сообщения
+		const messagesCountsInChats = '/api/MessagesCountsInChatsAll';
+		/**
+		 * @param {Array} ids
+		 * @return {String}
+		 */
+		const getChatInfoUrl = (ids) => (`/api/vk/ChatInfoById?chat_ids=${ids.join(',')}`);
+		const fetching = (async (url) => {
+			try {
+				let res = await fetch(url);
+				res = await res.json();
+				return res;
+			} catch (error) {
+				setError(error);
+			}
+		});
+		const getData = (async () => {
+			/**
+			 * @type {Array}
+			 */
+			let allChats = await fetching(allChatsUrl);
+			let allMessageCount = await fetching(messagesCountsInChats);
+			let allChatsMap = new Map();
+			allChats.forEach((item) => {
+				allChatsMap.set(item.chat_id, item.last_message_date);
+			});
+			allMessageCount.forEach((item) => {
+				allChatsMap.set(item.chat_id, {lastMessageDate: allChatsMap.get(item.chat_id), countMessages: item.messages_count});
+			});
+			/**
+			 * @type {Array}
+			 */
+			let allChatsInfo = await fetching(getChatInfoUrl(allChats.map((item) => (item.chat_id))));
+			let result = [];
+			console.log(allChatsInfo);
+			allChatsInfo.forEach((item) => {
+				let res = {}
+				res.id = item.id;
+				res.name = item.title;
+				res.countMembers = item.members_count;
+				res.avatar = item.photo && item.photo.photo_100;
+				res.lastMessageDate = allChatsMap.get(res.id).lastMessageDate * 1000;
+				res.countMessages = allChatsMap.get(res.id).countMessages;
+				result.push(res);
+			});
+			setAllItems(result);
 			setItems(result);
 			setIsLoaded(true);
-		},
-		(error) => {
-			setError(error);
-			setIsLoaded(false);
 		});
+		getData();
 	}, []);
 	if (error) {
 		return (
@@ -62,15 +86,23 @@ function Chats() {
 			<Loading/>
 		</>
 		);
+	} else if(items.length > 0){
+		return (
+			<>
+				<SearchPanel setSearch = {setSearch}/>
+				<Container>
+					{
+						items.map((item) => (<ChatPreviewCard attr={item} key={item.id}/>))
+					}
+				</Container>
+			</>
+		);
 	} else {
 		return (
 			<>
-				<SearchPanel/>
+				<SearchPanel setSearch = {setSearch}/>
 				<Container>
-					{
-						// Не забыть сменить testItems на items
-						testItems.map((item) => (<ChatPreviewCard attr={item} key={item.id}/>))
-					}
+					По запросу {searchString} ничего не было найдено.
 				</Container>
 			</>
 		);
