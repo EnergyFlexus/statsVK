@@ -29,7 +29,7 @@ function MembersItem(props) {
     } else {
         return (
             <div className={s.main}>
-                <a href={userUrlVkProfile} target="_blank" rel="noreferrer"><img src={props.avatar} className={s.avatar}></img></a>
+                <a href={userUrlVkProfile} target="_blank" rel="noreferrer"><img src={props.avatar} className={s.avatar} alt=''></img></a>
                 <div className={s.content}>
                     <div className={s.firstRow}>
                         <a href={userUrlVkProfile} target="_blank" rel="noreferrer"><span className={s.author}>{props.name}</span></a>
