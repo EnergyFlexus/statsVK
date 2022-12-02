@@ -5,6 +5,7 @@ import { Container } from 'react-bootstrap';
 import ChatPreviewCard from '../Components/Chats/ChatPreview/ChatPreviewCard';
 import SearchPanel from '../Components/Chats/SearchPanel/SearchPanel';
 import Loading from '../Components/Loading';
+import emptyChatAvatar from '../assets/images/emptyChatAvatar.png';
 
 const sortType = {
 	CountMembers: 0,
@@ -86,8 +87,8 @@ function Chats() {
 				let res = {}
 				res.id = item.id;
 				res.name = item.title;
-				res.countMembers = item.members_count;
-				res.avatar = item.photo && item.photo.photo_100;
+				res.countMembers = item.members_count - 1;
+				res.avatar = item.photo ? item.photo.photo_100 : emptyChatAvatar;
 				res.lastMessageDate = allChatsMap.get(res.id).lastMessageDate * 1000;
 				res.countMessages = allChatsMap.get(res.id).countMessages;
 				result.push(res);
