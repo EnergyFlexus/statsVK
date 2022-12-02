@@ -15,6 +15,7 @@ function Chat() {
 	const navigate = useNavigate();
 	const timerModal = useRef(null);
 
+
 	const [chatInfo, setChatInfo] = useState({});
 	const [favoritesStatus, setFavoritesStatus] = useState(false);
 	const [messages, setMessages] = useState([]);	

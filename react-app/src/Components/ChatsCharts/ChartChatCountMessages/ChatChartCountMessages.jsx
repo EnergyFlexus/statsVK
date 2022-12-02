@@ -46,15 +46,14 @@ const chartOptions = {
 const showChartAs = {
 	Day: 0,
 	Week: 1,
-	Year: 2
+	Month: 2
 };
 
 const unixTime = {
 	Hour: 3600000,
 	Day: 86400000,
 	Week: 604800000,
-	Month: 2629743000,
-	Year: 31556926000 
+	Month: 2592000000,
 }
 
 function ChatChartCountMessages(props) {
@@ -71,10 +70,10 @@ function ChatChartCountMessages(props) {
 		setText(text);
 	});
 	useEffect(() => {
-		const getUrl = (date1, date2) => (`/api/MessagesCountsByChatIdDate/${id}/${date1}/${date2}`);
-		const fetching = (async (date1, date2) => {
+		const getUrl = (interval ,date1, date2) => (`/api/MessagesCountsByChatIdDateIntervals/${id}/${interval}/${date1}/${date2}`);
+		const fetching = (async (interval, date1, date2) => {
 			try {
-				let res = await fetch(getUrl(date1, date2));
+				let res = await fetch(getUrl(interval, date1, date2));
 				res = await res.json();
 				return res;
 			} catch (error) {
@@ -87,27 +86,31 @@ function ChatChartCountMessages(props) {
 			let labels = [];
 			switch (showAs) {
 				case showChartAs.Day:
-					border = border - unixTime.Day;
-					for (let i = 0; i <= 24; i += 1) {
-						res.push(await fetching(Math.floor(border / 1000), Math.floor((border + unixTime.Hour) / 1000)));
+					border -= unixTime.Day;
+					res = await fetching(unixTime.Hour / 1000, Math.floor(border / 1000), 0);
+					border += unixTime.Hour;
+					for (let i = 0; i < 24; i += 1) {
 						labels[i] = new Date(border).toLocaleTimeString();
 						border += unixTime.Hour;
 					}
 				break;
 				case showChartAs.Week:
 					border = border - unixTime.Week;
-					for (let i = 0; i <= 7; i += 1) {
-						res.push(await fetching(Math.floor(border / 1000), Math.floor((border + unixTime.Day) / 1000)));
+					res = await fetching(unixTime.Day / 1000, Math.floor(border / 1000), 0);
+					border += unixTime.Day;
+					for (let i = 0; i < 7; i += 1) {
 						labels[i] = new Date(border).toLocaleDateString();
 						border += unixTime.Day;
 					}
 				break;
-				case showChartAs.Year:
-					border = border - unixTime.Year;
-					for (let i = 0; i <= 12; i += 1) {
-						res.push(await fetching(Math.floor(border / 1000), Math.floor((border + unixTime.Month) / 1000)));
+				case showChartAs.Month:
+					border = border - unixTime.Month;
+					res = await fetching(unixTime.Day / 1000, Math.floor(border / 1000), 0);
+					console.log(res);
+					border += unixTime.Day;
+					for (let i = 0; i < 30; i += 1) {
 						labels[i] = new Date(border).toLocaleDateString();
-						border += unixTime.Month;
+						border += unixTime.Day;
 					}
 				break;
 				default:
@@ -151,8 +154,8 @@ function ChatChartCountMessages(props) {
 							<Dropdown.Item onClick={event => {changeText(showChartAs.Week, 'Статистика за неделю')}}>
 								Статистика за неделю
 							</Dropdown.Item>
-							<Dropdown.Item onClick={event => {changeText(showChartAs.Year, 'Статистика за год')}}>
-								Статистика за год
+							<Dropdown.Item onClick={event => {changeText(showChartAs.Month, 'Статистика за месяц')}}>
+								Статистика за месяц
 							</Dropdown.Item>
 						</DropdownMenu>
 					</Dropdown>

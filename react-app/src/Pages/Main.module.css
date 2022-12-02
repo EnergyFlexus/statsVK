@@ -1,0 +1,70 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #282c34;
+    height: calc(100vh - 58px);
+}
+
+.firstContainer {
+    padding-top: 100px;
+    display: flex;
+    flex-direction: column;
+}
+
+.landingCol {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.landingContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.landingButtons {
+    margin-top: 10px;
+    display: flex;
+}
+
+.landingTitle {
+    font-weight: bold;
+    color: #f0f0f0;
+    margin-top: 30px;
+    margin-bottom: 0px;
+}
+
+.landingDesc {
+    font-weight: 200;
+    color: #f0f0f0;
+}
+
+.logo {
+    width: 150px;
+}
+
+.fluidContainer {
+    background-color: #212529;
+    color: white;
+}
+
+.statsContainer {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content:space-around;
+}
+
+.statsText {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.stateSkeleton {
+    width: 100px;
+    border-radius: 4px;
+    color: #292c34;
+}
