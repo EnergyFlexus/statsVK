@@ -38,8 +38,6 @@ props:
 function ChatChartMembersMessages(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [chartData, setChartData] = useState({});
-    const [dataUsersName, setDataUsersName] = useState([]);
-    const [dataUsersCountMsgs, setDataUsersCountMsgs] = useState([]);
 
     useEffect(() => {
         if(props.usersCountMessages && props.usersName) {

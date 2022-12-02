@@ -32,7 +32,7 @@ function ChatItem(props) {
     } else {
         return (
             <div className={s.main}>
-                <a href={userUrlVkProfile} target="_blank" rel="noreferrer"><img src={props.avatar} className={`${s.avatar} ${props.isOnlyText && s.none}`}></img></a>
+                <a href={userUrlVkProfile} target="_blank" rel="noreferrer"><img src={props.avatar} className={`${s.avatar} ${props.isOnlyText && s.none}`} alt=''></img></a>
                 <div className={`${s.content} ${props.isOnlyText && s.contentPadding}`}>
                     <div className={`${s.firstRow} ${props.isOnlyText && s.none}`}>
                         <a href={userUrlVkProfile} target="_blank" rel="noreferrer"><span className={s.author}>{props.authorName}</span></a>
