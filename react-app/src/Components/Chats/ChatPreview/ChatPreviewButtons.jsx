@@ -27,7 +27,8 @@ function ChatPreviewButtons(props) {
 			setError(error);
 		}
 	}
-	const downloadButton = error ? <Button style={buttonStyle} variant="danger" onClick={download}>Ошибка! Нажмите еще раз для повторной попытки</Button> : <Button style={buttonStyle} variant="success" onClick={download}>Скачать .csv</Button>
+	const downloadButton = error ? <Button style={buttonStyle} variant="danger" onClick={download}>Ошибка! Нажмите еще раз для повторной попытки</Button> :
+								   <Button style={buttonStyle} variant="success" onClick={download}>Скачать .csv</Button>
   	return (
 		<Container style={{marginTop: 13}}>
 			<Row>
