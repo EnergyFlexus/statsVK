@@ -10,7 +10,8 @@ import SignIn from './Pages/SignIn';
 import PassReset from './Pages/PassReset';
 import Chat from './Pages/Chat';	
 import Layout from './Pages/Layout';
-import ErrorPage from './Components/Error/ErrorPage'
+import ErrorPage from './Components/Error/ErrorPage';
+import Pudge from './Pages/Pudge';
 
 const router = createBrowserRouter([
   	{
@@ -47,9 +48,9 @@ const router = createBrowserRouter([
 				element: <Chat/>,
 			},
 			{
-
-				errorElement: <ErrorPage/>,
-			},
+				path: "pudge",
+				element: <Pudge/>
+			}
 		]
   	},
 ]);
