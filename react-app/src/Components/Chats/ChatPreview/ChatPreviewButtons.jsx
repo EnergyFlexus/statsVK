@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container, Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
@@ -11,15 +11,23 @@ const buttonStyle = {
 function ChatPreviewButtons(props) {
 	const id = props.id;
 	const name = props.name;
+	const [error, setError] = useState(null);
 	const download = async () => {
-		let res = await fetch(`/api/MessagesByChatIdCsv/${id}`);
-		res = await res.blob();
+		try {
+			let res = await fetch(`/api/MessagesByChatIdCsv/${id}`);
+			res = await res.blob();
 
-		var a = document.createElement("a");
-		a.href = window.URL.createObjectURL(res);
-		a.download = `${name}`;
-		a.click();
+			var a = document.createElement("a");
+			a.href = window.URL.createObjectURL(res);
+			a.download = `${name}`;
+			a.click();
+			setError(null);
+		} catch (error) {
+			console.log('err', error.message);
+			setError(error);
+		}
 	}
+	const downloadButton = error ? <Button style={buttonStyle} variant="danger" onClick={download}>Ошибка! Нажмите еще раз для повторной попытки</Button> : <Button style={buttonStyle} variant="success" onClick={download}>Скачать .csv</Button>
   	return (
 		<Container style={{marginTop: 13}}>
 			<Row>
@@ -30,7 +38,7 @@ function ChatPreviewButtons(props) {
 				</Col>
 				<Col md="auto">
 					<Link>
-						<Button style={buttonStyle} variant="success" onClick={download}>Скачать .csv</Button>
+						{downloadButton}
 					</Link>
 				</Col>
 			</Row>
