@@ -10,6 +10,8 @@ props:
     name                : string    - Название     
     hasInFavorites      : bool      - Есть в избранных?
     onChangeFavorites   : callback  - Колбек изменения статуса избранного
+    onClickDownload     : callback  - Колбек нажатия на скачать чат
+    lockDownloadBtn     : bool      - Блокировать кнопку скачать чат
     lockFavoritesBtn    : bool      - Блокировать кнопку статуса избранного
     ownerName           : string    - Имя владельца
     countMessages       : number    - Количество сообщений
@@ -66,12 +68,14 @@ function ChatHeader(props) {
                 <Card.Body>
                     <Row className='w-100 m-0'>
                         <Col className={`${s.content} p-0 justify-content-center justify-content-md-start`} xs={12} md={5} lg={7}>
-                            <img src={props.avatar} className={s.avatar}></img>
+                            <img src={props.avatar} className={s.avatar} alt=''></img>
                             <div className={s.info}>
                                 <h2 className={s.name}>{props.name}</h2>
                                 <Button
                                     variant='success'
                                     size="sm"
+                                    disabled={props.lockDownloadBtn}
+                                    onClick={(e) => props.onClickDownload()}
                                 >
                                     Скачать .csv
                                 </Button>

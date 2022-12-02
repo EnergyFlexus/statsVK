@@ -1,4 +1,3 @@
-import { House, HouseDoor, HouseFill } from 'react-bootstrap-icons';
 import Nav from 'react-bootstrap/Nav';
 import {LinkContainer} from 'react-router-bootstrap';
 import s from './NavigationLinks.module.css'
