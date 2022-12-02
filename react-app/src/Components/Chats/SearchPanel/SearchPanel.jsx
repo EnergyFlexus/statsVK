@@ -5,6 +5,8 @@ import SortDropDown from './SortDropDown';
 
 function SearchPanel(props) {
 	const setSearch = props.setSearch;
+	const sortType = props.sortType
+	const setSort = props.setSort;
 	return (
     	<Container className='mt-4 px-2.5'>
 			<Row>
@@ -12,7 +14,7 @@ function SearchPanel(props) {
 					<Form.Control placeholder="Начните вводить название чата" onChange={(event) => {setSearch(event.target.value)}}/>
 				</Col>
 				<Col md="auto">
-					<SortDropDown/>
+					<SortDropDown sortType={sortType} setSort={setSort}/>
 				</Col>
 			</Row>
     	</Container>

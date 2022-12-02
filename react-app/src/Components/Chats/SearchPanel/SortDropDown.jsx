@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 
-const sortType = {
-	CountMembers: 0,
-	CountMessages: 1,
-	DateLastMessage: 2
-};
+function SortDropDown(props) {
+	const setSort = props.setSort;
+	const sortType = props.sortType;
 
-function SortDropDown() {
 	const [activeItem, setActiveItem] = useState(sortType.CountMembers);
 
 	const setActive = ((sortType) => {
@@ -22,15 +19,15 @@ function SortDropDown() {
 
 		<Dropdown.Menu variant="dark">
 			<Dropdown.Item active={activeItem === sortType.CountMembers} 
-						   onClick={() => {setActive(sortType.CountMembers)}}>
+						   onClick={() => {setActive(sortType.CountMembers); setSort(sortType.CountMembers)}}>
 						   Количеству участников
 			</Dropdown.Item>
 			<Dropdown.Item active={activeItem === sortType.CountMessages}
-						   onClick={() => {setActive(sortType.CountMessages)}}>
+						   onClick={() => {setActive(sortType.CountMessages); setSort(sortType.CountMessages)}}>
 						   Количеству сообщений
 			</Dropdown.Item>
 			<Dropdown.Item active={activeItem === sortType.DateLastMessage}
-						   onClick={() => {setActive(sortType.DateLastMessage)}}>
+						   onClick={() => {setActive(sortType.DateLastMessage); setSort(sortType.DateLastMessage)}}>
 						   Дате последнего сообщения
 			</Dropdown.Item>
 		</Dropdown.Menu>
