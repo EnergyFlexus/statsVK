@@ -6,6 +6,7 @@ import ChatPreviewButtons from './ChatPreviewButtons';
 import ChatPreviewInfo from './ChatPreviewInfo';
 
 function ChatPreviewBody(props) {
+	const name = props.name;
 	const avatar = props.avatar;
 	const countMembers = props.countMembers;
 	const lastMessageDate = props.lastMessageDate;
@@ -21,7 +22,7 @@ function ChatPreviewBody(props) {
 					<ChatPreviewInfo countMembers={countMembers} lastMessageDate={lastMessageDate} countMessages={countMessages}/>
 				</Col>
 				<Col md="auto">
-					<ChatPreviewButtons id={id}/>
+					<ChatPreviewButtons id={id} name={name}/>
 				</Col>
 			</Row>
 		</Container>

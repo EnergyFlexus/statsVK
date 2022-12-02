@@ -10,6 +10,16 @@ const buttonStyle = {
 
 function ChatPreviewButtons(props) {
 	const id = props.id;
+	const name = props.name;
+	const download = async () => {
+		let res = await fetch(`/api/MessagesByChatIdCsv/${id}`);
+		res = await res.blob();
+
+		var a = document.createElement("a");
+		a.href = window.URL.createObjectURL(res);
+		a.download = `${name}`;
+		a.click();
+	}
   	return (
 		<Container style={{marginTop: 13}}>
 			<Row>
@@ -20,7 +30,7 @@ function ChatPreviewButtons(props) {
 				</Col>
 				<Col md="auto">
 					<Link>
-						<Button style={buttonStyle} variant="success">Купить</Button>
+						<Button style={buttonStyle} variant="success" onClick={download}>Скачать .csv</Button>
 					</Link>
 				</Col>
 			</Row>

@@ -26,12 +26,14 @@ function Pudge() {
 			src={pudge}
 			alt=''
 			style={style}/>
-			<Button onClick={(e) => {
-				setStyle(styleSpin);
-			}}>КРУТИТЬ МЯСНИКА</Button>
-			<Button className='ms-2' onClick={(e) => {
-				setStyle(styleStop);
-			}}>ОСТАНОВИТЬ МЯСНИКА</Button>
+			<div>
+				<Button onClick={(e) => {
+					setStyle(styleSpin);
+				}}>КРУТИТЬ МЯСНИКА</Button>
+				<Button className='ms-2' onClick={(e) => {
+					setStyle(styleStop);
+				}}>ОСТАНОВИТЬ МЯСНИКА</Button>
+			</div>
 		</div>
     	
   	);
