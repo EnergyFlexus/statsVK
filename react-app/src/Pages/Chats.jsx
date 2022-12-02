@@ -108,7 +108,11 @@ function Chats() {
 	} else if (!isLoaded) {
 		return (
 		<>
-			<Loading/>
+			<SearchPanel setSearch = {setSearch} sortType={sortType} setSort = {setSort}/>
+			<Container className='mt-3'>
+				<Loading/>
+			</Container>
+			
 		</>
 		);
 	} else if(items.length > 0){
