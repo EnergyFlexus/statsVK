@@ -452,22 +452,28 @@ namespace VkApi
 				return;
 			}
 
+			long upper = 0;
+
+			if(date2 is null || date2 == 0)
+				upper = chat.last_message_date;
+			else
+				upper = (long)date2;
+
+			// too big request
+			if(long.Abs(upper - date1) / interval > 1000)
+			{
+				await Results.BadRequest().ExecuteAsync(context);
+				return;
+			}
+
 			List<long> messages_dates_intervals = new List<long>();
-
-			// 1 November 2022, 0:00:00
-			if(date1 < 1667260800)
-				date1 = 1667260800;
-
-			// 1 November 2022, 0:00:00
-			if(date2 is null || date2 == 0 || date2 > chat.last_message_date)
-				date2 = chat.last_message_date;
 
 			var messages_dates = (from m in vkDbContext.messages
 				where m.chat_id == id && m.date < date2 && m.date >= date1
 				orderby m.date descending
 				select m.date).ToList();
 
-			for(long i = date1, j = date1 + interval; i < date2; i += interval, j += interval)
+			for(long i = date1, j = date1 + interval; i < upper; i += interval, j += interval)
 			{
 				long messages_count = (from md in messages_dates
 					where md >= i && md < j
