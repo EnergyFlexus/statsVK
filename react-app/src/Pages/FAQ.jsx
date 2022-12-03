@@ -30,7 +30,7 @@ function FAQ() {
 										1. Зарегистрировать аккаунт на сайте.
 									</p>
 									<p>
-										2. Перейти в <a href='https://vk.com/club181354529' target='_blank'>группу ВК.</a>
+										2. Перейти в <a href='https://vk.com/club181354529' target='_blank' rel='noreferrer'>группу ВК.</a>
 									</p>
 									<p>
 										3. Добавить бота в беседу.

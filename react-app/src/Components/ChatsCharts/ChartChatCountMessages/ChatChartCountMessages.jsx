@@ -107,7 +107,6 @@ function ChatChartCountMessages(props) {
 				case showChartAs.Month:
 					border = border - unixTime.Month;
 					res = await fetching(unixTime.Day / 1000, Math.floor(border / 1000), Math.floor(now / 1000));
-					console.log(res);
 					border += unixTime.Day;
 					for (let i = 0; i < 30; i += 1) {
 						labels[i] = new Date(border).toLocaleDateString();
