@@ -81,13 +81,14 @@ function ChatChartCountMessages(props) {
 			}
 		});
 		const getChartData = (async () => {
+			let now = Date.now();
 			let border = Date.now();
 			let res = [];
 			let labels = [];
 			switch (showAs) {
 				case showChartAs.Day:
 					border -= unixTime.Day;
-					res = await fetching(unixTime.Hour / 1000, Math.floor(border / 1000), 0);
+					res = await fetching(unixTime.Hour / 1000, Math.floor(border / 1000), Math.floor(now / 1000));
 					border += unixTime.Hour;
 					for (let i = 0; i < 24; i += 1) {
 						labels[i] = new Date(border).toLocaleTimeString();
@@ -96,7 +97,7 @@ function ChatChartCountMessages(props) {
 				break;
 				case showChartAs.Week:
 					border = border - unixTime.Week;
-					res = await fetching(unixTime.Day / 1000, Math.floor(border / 1000), 0);
+					res = await fetching(unixTime.Day / 1000, Math.floor(border / 1000), Math.floor(now / 1000));
 					border += unixTime.Day;
 					for (let i = 0; i < 7; i += 1) {
 						labels[i] = new Date(border).toLocaleDateString();
@@ -105,7 +106,7 @@ function ChatChartCountMessages(props) {
 				break;
 				case showChartAs.Month:
 					border = border - unixTime.Month;
-					res = await fetching(unixTime.Day / 1000, Math.floor(border / 1000), 0);
+					res = await fetching(unixTime.Day / 1000, Math.floor(border / 1000), Math.floor(now / 1000));
 					console.log(res);
 					border += unixTime.Day;
 					for (let i = 0; i < 30; i += 1) {
