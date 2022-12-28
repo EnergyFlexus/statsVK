@@ -64,6 +64,18 @@ namespace VkApi
 				await api.MessagesByChatIdDate(context, vkDbContext, id, date1, date2, ord);
 			});
 
+			group.MapGet("/MessagesByChatIdCsv/{id:int}", // + order
+				async (HttpContext context, VkDbContext vkDbContext, Api api, long id) => {
+
+				await api.MessagesByChatIdCsv(context, vkDbContext, id);
+			});
+
+			group.MapGet("/MessagesCount", 
+				async (HttpContext context, VkDbContext vkDbContext, Api api) => {
+				
+				await api.MessagesCount(context, vkDbContext);
+			});
+
 			group.MapGet("/MessagesCountsInChatsAll", // + order
 				async (HttpContext context, VkDbContext vkDbContext, Api api) => {
 				
@@ -77,10 +89,19 @@ namespace VkApi
 				
 				await api.MessagesCountsByChatId(context, vkDbContext, id);
 			});
-			group.MapGet("/MessagesCountsByChatIdDate/{id:int}/{date1:int}/{date2:int?}",
+
+			group.MapGet("/MessagesCountsByChatIdDate/{id:int}/{date1:int}/{date2:int?}", // + order
 				async (HttpContext context, VkDbContext vkDbContext, Api api, long id, long date1, long? date2) => {
 
+				var order = context.Request.Query["order"];
+				ApiOrder ord = Api.ParseOrder(order);
 				await api.MessagesCountsByChatIdDate(context, vkDbContext, id, date1, date2);
+			});
+
+			group.MapGet("/MessagesCountsByChatIdDateIntervals/{id:int}/{interval:int}/{date1:int}/{date2:int?}",
+				async (HttpContext context, VkDbContext vkDbContext, Api api, long id, long interval, long date1, long? date2) => {
+					
+				await api.MessagesCountsByChatIdDateIntervals(context, vkDbContext, id, interval, date1, date2);
 			});
 
 			group.MapGet("/ChatsAll", // + order
@@ -95,6 +116,12 @@ namespace VkApi
 				async (HttpContext context, VkDbContext vkDbContext, Api api, long id) => {
 
 				await api.ChatById(context, vkDbContext, id);
+			});
+
+			group.MapGet("/ChatsCount", 
+				async (HttpContext context, VkDbContext vkDbContext, Api api) => {
+
+				await api.ChatsCount(context, vkDbContext);
 			});
 
 			group.MapGet("/ChatUsersAll", 
@@ -123,6 +150,12 @@ namespace VkApi
 				async (HttpContext context, VkDbContext vkDbContext, Api api, long chat_id, long user_id) => {
 				
 				await api.ChatUserByIds(context, vkDbContext, chat_id, user_id);
+			});
+
+			group.MapGet("/ChatUsersCount", 
+				async (HttpContext context, VkDbContext vkDbContext, Api api) => {
+
+				await api.ChatUsersCount(context, vkDbContext);
 			});
 
 			group.MapGet("/vk/UsersInfoByChatId/{id:int}",
@@ -341,6 +374,33 @@ namespace VkApi
 			await Results.Json(messages_DTO).ExecuteAsync(context);
 		}
 
+		public async Task MessagesByChatIdCsv(HttpContext context, VkDbContext vkDbContext, long id)
+		{
+			var messages_csv = from m in vkDbContext.messages
+				where m.chat_id == id
+				orderby m.message_id ascending
+				select new {m.user_id, m.date, m.text};
+
+			StringBuilder file_builder = new StringBuilder("user_id\tdate\ttext\n");
+			foreach(var m in messages_csv)
+			{
+				string text = m.text.Replace('\n', ' ');
+				file_builder.Append(m.user_id).Append('\t')
+					.Append(m.date).Append('\t')
+					.Append(text).Append('\n');
+			}
+			
+			await Results.File(Encoding.UTF8.GetBytes(file_builder.ToString()), "text/csv", "messages.csv").ExecuteAsync(context);
+		}
+
+		public async Task MessagesCount(HttpContext context, VkDbContext vkDbContext)
+		{
+			long count = await (from cu in vkDbContext.chat_users
+				select cu.messages_count).SumAsync();
+
+			await Results.Json(count).ExecuteAsync(context);
+		}
+
 		public async Task MessagesCountsInChatsAll(HttpContext context, VkDbContext vkDbContext, ApiOrder order)
 		{
 			var messages_counts = vkDbContext.chats.Include(c => c.chat_users)
@@ -362,8 +422,11 @@ namespace VkApi
 
 		public async Task MessagesCountsByChatId(HttpContext context, VkDbContext vkDbContext, long id)
 		{
-			var messages_count = vkDbContext.chat_users.Sum(cu => cu.messages_count);
-			await Results.Json(messages_count).ExecuteAsync(context);
+			var count = await (from m in vkDbContext.messages
+				where m.chat_id == id
+				select m).LongCountAsync();
+
+			await Results.Json(count).ExecuteAsync(context);
 		}
 
 		public async Task MessagesCountsByChatIdDate
@@ -374,9 +437,51 @@ namespace VkApi
 
 			var counts = await (from m in vkDbContext.messages
 				where m.date >= date1 && m.date < date2 && m.chat_id == id
-				select m).CountAsync();
+				select m).LongCountAsync();
 
 			await Results.Json(counts).ExecuteAsync(context);	
+		}
+
+		public async Task MessagesCountsByChatIdDateIntervals
+			(HttpContext context, VkDbContext vkDbContext, long id, long interval, long date1, long? date2)
+		{
+			var chat = await vkDbContext.chats.FindAsync(id);
+			if(chat is null)
+			{
+				await Results.Json(new List<long>()).ExecuteAsync(context);
+				return;
+			}
+
+			long upper = 0;
+
+			if(date2 is null || date2 == 0)
+				upper = chat.last_message_date;
+			else
+				upper = (long)date2;
+
+			// too big request
+			if(long.Abs(upper - date1) / interval > 1000)
+			{
+				await Results.BadRequest().ExecuteAsync(context);
+				return;
+			}
+
+			List<long> messages_dates_intervals = new List<long>();
+
+			var messages_dates = (from m in vkDbContext.messages
+				where m.chat_id == id && m.date < date2 && m.date >= date1
+				orderby m.date descending
+				select m.date).ToList();
+
+			for(long i = date1, j = date1 + interval; i < upper; i += interval, j += interval)
+			{
+				long messages_count = (from md in messages_dates
+					where md >= i && md < j
+					select md).LongCount();
+
+				messages_dates_intervals.Add(messages_count);
+			}
+			await Results.Json(messages_dates_intervals).ExecuteAsync(context);
 		}
 
 		public async Task ChatsAll(HttpContext context, VkDbContext vkDbContext, ApiOrder order)
@@ -405,6 +510,12 @@ namespace VkApi
 
 			if(chat is null) await Results.Json(null).ExecuteAsync(context);
 			else await Results.Json(new ChatDTO(chat)).ExecuteAsync(context);
+		}
+
+		public async Task ChatsCount(HttpContext context, VkDbContext vkDbContext)
+		{
+			long count = await vkDbContext.chats.LongCountAsync();
+			await Results.Json(count).ExecuteAsync(context);
 		}
 
 		public async Task ChatUsersAll(HttpContext context, VkDbContext vkDbContext)
@@ -474,6 +585,12 @@ namespace VkApi
 			else await Results.Json(new ChatUserDTO(chat_user)).ExecuteAsync(context);
 		}
 
+		public async Task ChatUsersCount(HttpContext context, VkDbContext vkDbContext)
+		{
+			long count = await vkDbContext.chat_users.LongCountAsync();
+			await Results.Json(count).ExecuteAsync(context);
+		}
+
 		public async Task UsersInfoByChatId(HttpContext context, VkDbContext vkDbContext, long id)
 		{
 			var result = await vkClient.MessagesGetConversationMembersAsync
@@ -505,7 +622,9 @@ namespace VkApi
 
 			foreach(JsonObject? a in arr)
 			{
+				long id = (long)a!["peer"]!["id"]!;
 				JsonObject cs = (JsonObject)a!["chat_settings"]!;
+				cs.Add(new KeyValuePair<string, JsonNode?>("id", id - VkClient.const_peer_id));
 				cs.Remove("admin_ids");
 				cs.Remove("is_group_channel");
 				cs.Remove("acl");

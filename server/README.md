@@ -83,6 +83,23 @@ Messages:
 	[{"message_id":1,"text":"asd asd","date":1668623544,"chat_id":2,"user_id":1},
 	{"message_id":2,"text":"asd asd","date":1668623544,"chat_id":2,"user_id":1}]
 
+	# выдаст csv файл с сообщениями беседы ("messages.csv", UTF-8, разделение через табуляцию)
+	/api/MessagesByChatIdCsv/[id]
+
+	# пример
+	/api/MessagesByChatIdCsv/8
+
+	(начнется загрузка файлика)
+	
+
+	# кол-во вообще всех сообщений
+	/api/MessagesCount
+
+	#пример
+	/api/MessagesCount
+
+	592
+
 
 	# кол-во сообщений в чатах
 	# order (необязательно) отвечает за порядок, либо по возрастанию, либо по убыванию кол-ва сообещний в чате
@@ -114,6 +131,17 @@ Messages:
 
 	8
 
+	# сообщения в чате по датам, сгруппированные по интервалам
+	# даты в UNIX формате
+	# date1 = 01.11.2022 (в unix формате) если указано значение меньше
+	# если date2 == 0 или его нет, то загрузит сообщения до самого нового
+	/api/MessagesCountsByChatIdDateIntervals/[id]/[interval]/[date1]/(date2)
+
+	#пример
+	/api/MessagesCountsByChatIdDateIntervals/1/3600/123
+
+	[0,0,1,0,0,0,0,1,4,14]
+
 Chats:
 ------
 
@@ -135,6 +163,15 @@ Chats:
 	/api/ChatById/2
 
 	{"chat_id":2,"last_message_date":1668623544}
+
+
+	# кол-во всех чатов
+	/api/ChatsCount
+
+	#пример
+	/api/ChatsCount
+
+	3
 
 
 ChatUsers: (один и тот же пользователь в разных чатах - разные ChatUser)
@@ -179,6 +216,15 @@ ChatUsers: (один и тот же пользователь в разных ч�
 
 	{"chat_id":2,"user_id":1,"messages_count":9}
 
+	
+	# кол-во всех чат-юзеров
+	/api/ChatUsersCount
+
+	# пример
+	/api/ChatUsersCount
+
+	6
+
 
 VkApi methods: (методы, которые через бота обращаются к Vk API)
 ---------------------------------------------------------------
@@ -199,7 +245,7 @@ VkApi methods: (методы, которые через бота обращаю�
 	# пример
 	/api/vk/ChatInfoById?chat_ids=8
 
-	[{"title":"name","members_count":5,"owner_id":123,"state":"in","photo":{"photo_50":"url","photo_100":"url","photo_200":"url","is_default_photo":false,"is_default_call_photo":false},"active_ids":[321,212,111,2242],"is_disappearing":false,"is_service":false}]
+	[{"title":"name","members_count":5,"owner_id":123,"state":"in","photo":{"photo_50":"url","photo_100":"url","photo_200":"url","is_default_photo":false,"is_default_call_photo":false},"active_ids":[321,212,111,2242],"is_disappearing":false,"is_service":false, "id":8}]
 
 
 
